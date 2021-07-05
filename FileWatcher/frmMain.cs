@@ -18,6 +18,9 @@ namespace FileWatcher
         public frmMain()
         {
             InitializeComponent();
+
+            tbxPathTarget.Text = Properties.Settings.Default.TargetFile;
+            tbxPathOpponent.Text = Properties.Settings.Default.OpponentFile;
         }
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -29,14 +32,33 @@ namespace FileWatcher
             }
             else
             {
-                if (settingChangedFlag)
-                {
-                    Properties.Settings.Default.TargetFile =  tbxPathTarget.Text;
-                    //Properties.Settings.Default.WatchInterval = Convert.ToInt32(nudTime.Value);
-                    Properties.Settings.Default.OpponentFile = tbxPathOpponent.Text;
-                    Properties.Settings.Default.Save();
-                }
+                SaveSetting();
             }
+        }
+        private void SaveSetting()
+        {
+            if (settingChangedFlag) //変更があるなら保存する
+            {
+                Properties.Settings.Default.TargetFile =  tbxPathTarget.Text;
+                //Properties.Settings.Default.WatchInterval = Convert.ToInt32(nudTime.Value);
+                Properties.Settings.Default.OpponentFile = tbxPathOpponent.Text;
+                Properties.Settings.Default.Save();
+            }
+        }
+        private void pnlV_Validation(WindowsFormControlsLibrary.IktsValidation obj)
+        {
+            btnVerify.Enabled = pnlV.isValidated;
+        }
+
+        private void tsmiOpen_Click(object sender, EventArgs e)
+        {
+            this.Visible = true;
+        }
+
+        private void tsmiQuit_Click(object sender, EventArgs e)
+        {
+            closeFlag = true;
+            Application.Exit();
         }
     }
 }
