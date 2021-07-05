@@ -74,6 +74,7 @@ namespace FileWatcher
             this.tbxPathOpponent.Name = "tbxPathOpponent";
             this.tbxPathOpponent.Size = new System.Drawing.Size(364, 23);
             this.tbxPathOpponent.TabIndex = 12;
+            this.tbxPathOpponent.ModifiedChanged += new System.EventHandler(this.tbxs_ModifiedChanged);
             // 
             // tbxPathTarget
             // 
@@ -84,6 +85,7 @@ namespace FileWatcher
             this.tbxPathTarget.Name = "tbxPathTarget";
             this.tbxPathTarget.Size = new System.Drawing.Size(364, 23);
             this.tbxPathTarget.TabIndex = 11;
+            this.tbxPathTarget.ModifiedChanged += new System.EventHandler(this.tbxs_ModifiedChanged);
             // 
             // btnBrowseOpponent
             // 

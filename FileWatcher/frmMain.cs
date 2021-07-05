@@ -37,7 +37,7 @@ namespace FileWatcher
         }
         private void SaveSetting()
         {
-            if (settingChangedFlag) //変更があるなら保存する
+            if (settingChangedFlag && pnlV.isValidated) //変更がありすべて埋められているなら保存する
             {
                 Properties.Settings.Default.TargetFile =  tbxPathTarget.Text;
                 //Properties.Settings.Default.WatchInterval = Convert.ToInt32(nudTime.Value);
@@ -59,6 +59,11 @@ namespace FileWatcher
         {
             closeFlag = true;
             Application.Exit();
+        }
+
+        private void tbxs_ModifiedChanged(object sender, EventArgs e)
+        {
+            settingChangedFlag = true;
         }
     }
 }
