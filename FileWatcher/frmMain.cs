@@ -74,7 +74,14 @@ namespace FileWatcher
                 tb = tbxPathTarget;
             else
                 tb = tbxPathOpponent;
-            ofd.InitialDirectory = Path.GetDirectoryName(tb.Text);
+            if (Directory.Exists(tb.Text))
+            {
+                ofd.InitialDirectory = Path.GetDirectoryName(tb.Text);
+            }
+            else
+            {
+                ofd.InitialDirectory = "c:\\";
+            }
             if(ofd.ShowDialog()== DialogResult.OK)
             {
                 tb.Text = ofd.FileName;
