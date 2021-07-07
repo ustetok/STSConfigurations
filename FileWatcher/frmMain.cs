@@ -7,14 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace FileWatcher
 {
     public partial class frmMain : Form
     {
-        private bool closeFlag = false;
         private bool settingChangedFlag = false;
-
+        private FileAttribute FATarget, FAOpponent;
         public frmMain()
         {
             InitializeComponent();
@@ -24,18 +24,6 @@ namespace FileWatcher
         }
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (!closeFlag)
-            {
-                this.Visible = false;
-                e.Cancel = true;
-            }
-            else
-            {
-                SaveSetting();
-            }
-        }
-        private void SaveSetting()
         {
             if (settingChangedFlag && pnlV.isValidated) //変更がありすべて埋められているなら保存する
             {
@@ -49,21 +37,93 @@ namespace FileWatcher
         {
             btnVerify.Enabled = pnlV.isValidated;
         }
-
-        private void tsmiOpen_Click(object sender, EventArgs e)
+        private void btnVerify_Click(object sender, EventArgs e)
         {
-            this.Visible = true;
+            string msg = "";
+            FATarget = new FileAttribute(tbxPathTarget.Text);
+            FAOpponent = new FileAttribute(tbxPathOpponent.Text);
+
+            if (FATarget.Error) msg += "手元のファイルが存在しないか拡張子の異常が見られます\r\n";
+            if (FAOpponent.Error) msg += "相手ファイルが存在しないか拡張子の異常が見られます\r\n";
+            if (FATarget.Extension != FAOpponent.Extension) msg += "双方の拡張子が異なります\r\n";
+            if (msg == "")
+            {
+                msg = "それぞれのファイルに異常はありません\r\n";
+                if (FATarget.LastWriteTime == FAOpponent.LastWriteTime)
+                {
+                    msg += "が、最終更新日が同じです";
+                }
+                else if (FATarget.FileName != FAOpponent.FileName)
+                {
+                    msg += "が、双方のファイル名が異なります";
+                }
+                else
+                {
+                    msg += "手元のファイルの最終更新日は　\t\t" + FATarget.LastWriteTime.ToString() + "\r\n";
+                    msg += "相手ファイルの最終更新日は　　\t\t" + FAOpponent.LastWriteTime.ToString() + "\r\n";
+
+                    btnSynchronize.Enabled = true;
+                }
+            }
+            lblReport.Text = msg;
         }
-
-        private void tsmiQuit_Click(object sender, EventArgs e)
+        private void btnsBrows_Click(object sender, EventArgs e)
         {
-            closeFlag = true;
-            Application.Exit();
+            TextBox tb;
+            if (((Button)sender) == btnBrowseTarget)
+                tb = tbxPathTarget;
+            else
+                tb = tbxPathOpponent;
+            ofd.InitialDirectory = Path.GetDirectoryName(tb.Text);
+            if(ofd.ShowDialog()== DialogResult.OK)
+            {
+                tb.Text = ofd.FileName;
+            }
+
         }
-
-        private void tbxs_ModifiedChanged(object sender, EventArgs e)
+        private void tbxs_TextChanged(object sender, EventArgs e)
         {
+            btnSynchronize.Enabled = false;
             settingChangedFlag = true;
+        }
+
+        private void btnSynchronize_Click(object sender, EventArgs e)
+        {
+            if(MessageBox.Show("最新のファイルをコピーしますか？", "確認", MessageBoxButtons.YesNo)== DialogResult.Yes)
+            {
+                string targetPath = FATarget.LastWriteTime > FAOpponent.LastWriteTime ? tbxPathTarget.Text : tbxPathOpponent.Text;
+                string movetoPath = FATarget.LastWriteTime < FAOpponent.LastWriteTime ? tbxPathTarget.Text : tbxPathOpponent.Text;
+                try
+                {
+                    File.Copy(targetPath, movetoPath, true);
+                }
+                catch(Exception ee)
+                {
+                    MessageBox.Show(ee.Message, "ERROR");
+                }
+                finally
+                {
+                    MessageBox.Show("プログラムを終了します", "コピー完了しました");
+                    Application.Exit();
+                }
+            }
+        }
+    }
+    public class FileAttribute
+    {
+        public bool Error { get; set; } = false;
+        public bool Exist { get; set; }             //存在しない場合 false
+        public string FileName { get; set; }
+        public string Extension { get; set; }       //存在しない場合 ""
+        public DateTime LastWriteTime { get; set; }
+        public FileAttribute(string fileName)
+        {
+            Exist = File.Exists(fileName);
+            FileName = Path.GetFileName(fileName);
+            Extension = Path.GetExtension(fileName);
+            LastWriteTime = File.GetLastWriteTime(fileName);
+
+            if (!Exist || Extension == "") Error = true;
         }
     }
 }

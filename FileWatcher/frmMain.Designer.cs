@@ -29,8 +29,6 @@ namespace FileWatcher
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.pnlV = new WindowsFormControlsLibrary.PanelValidation();
             this.tbxPathOpponent = new WindowsFormControlsLibrary.TextBoxFWValidation();
             this.tbxPathTarget = new WindowsFormControlsLibrary.TextBoxFWValidation();
@@ -38,15 +36,11 @@ namespace FileWatcher
             this.btnBrowseTarget = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.cmsMainMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.tsmiOpen = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiQuit = new System.Windows.Forms.ToolStripMenuItem();
             this.lblReport = new System.Windows.Forms.Label();
             this.btnVerify = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnSynchronize = new System.Windows.Forms.Button();
+            this.ofd = new System.Windows.Forms.OpenFileDialog();
             this.pnlV.SuspendLayout();
-            this.cmsMainMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlV
@@ -61,7 +55,7 @@ namespace FileWatcher
             this.pnlV.Location = new System.Drawing.Point(12, 13);
             this.pnlV.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.pnlV.Name = "pnlV";
-            this.pnlV.Size = new System.Drawing.Size(514, 64);
+            this.pnlV.Size = new System.Drawing.Size(794, 64);
             this.pnlV.TabIndex = 0;
             this.pnlV.Validation += new System.Action<WindowsFormControlsLibrary.IktsValidation>(this.pnlV_Validation);
             // 
@@ -72,9 +66,9 @@ namespace FileWatcher
             this.tbxPathOpponent.isValidated = false;
             this.tbxPathOpponent.Location = new System.Drawing.Point(107, 36);
             this.tbxPathOpponent.Name = "tbxPathOpponent";
-            this.tbxPathOpponent.Size = new System.Drawing.Size(364, 23);
+            this.tbxPathOpponent.Size = new System.Drawing.Size(648, 23);
             this.tbxPathOpponent.TabIndex = 12;
-            this.tbxPathOpponent.ModifiedChanged += new System.EventHandler(this.tbxs_ModifiedChanged);
+            this.tbxPathOpponent.TextChanged += new System.EventHandler(this.tbxs_TextChanged);
             // 
             // tbxPathTarget
             // 
@@ -83,112 +77,87 @@ namespace FileWatcher
             this.tbxPathTarget.isValidated = false;
             this.tbxPathTarget.Location = new System.Drawing.Point(107, 2);
             this.tbxPathTarget.Name = "tbxPathTarget";
-            this.tbxPathTarget.Size = new System.Drawing.Size(364, 23);
+            this.tbxPathTarget.Size = new System.Drawing.Size(648, 23);
             this.tbxPathTarget.TabIndex = 11;
-            this.tbxPathTarget.ModifiedChanged += new System.EventHandler(this.tbxs_ModifiedChanged);
+            this.tbxPathTarget.TextChanged += new System.EventHandler(this.tbxs_TextChanged);
             // 
             // btnBrowseOpponent
             // 
-            this.btnBrowseOpponent.Location = new System.Drawing.Point(477, 36);
+            this.btnBrowseOpponent.Location = new System.Drawing.Point(761, 36);
             this.btnBrowseOpponent.Name = "btnBrowseOpponent";
             this.btnBrowseOpponent.Size = new System.Drawing.Size(30, 23);
             this.btnBrowseOpponent.TabIndex = 10;
             this.btnBrowseOpponent.Text = "...";
             this.btnBrowseOpponent.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnBrowseOpponent.UseVisualStyleBackColor = true;
+            this.btnBrowseOpponent.Click += new System.EventHandler(this.btnsBrows_Click);
             // 
             // btnBrowseTarget
             // 
-            this.btnBrowseTarget.Location = new System.Drawing.Point(477, 1);
+            this.btnBrowseTarget.Location = new System.Drawing.Point(761, 1);
             this.btnBrowseTarget.Name = "btnBrowseTarget";
             this.btnBrowseTarget.Size = new System.Drawing.Size(30, 23);
             this.btnBrowseTarget.TabIndex = 9;
             this.btnBrowseTarget.Text = "...";
             this.btnBrowseTarget.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnBrowseTarget.UseVisualStyleBackColor = true;
+            this.btnBrowseTarget.Click += new System.EventHandler(this.btnsBrows_Click);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(5, 39);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(87, 15);
+            this.label2.Size = new System.Drawing.Size(75, 15);
             this.label2.TabIndex = 8;
-            this.label2.Text = "移動先のファイル";
+            this.label2.Text = "相手のファイル";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(5, 4);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(84, 15);
+            this.label1.Size = new System.Drawing.Size(75, 15);
             this.label1.TabIndex = 7;
-            this.label1.Text = "監視するファイル";
-            // 
-            // notifyIcon1
-            // 
-            this.notifyIcon1.ContextMenuStrip = this.cmsMainMenu;
-            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Text = "FileWatcher";
-            this.notifyIcon1.Visible = true;
-            // 
-            // cmsMainMenu
-            // 
-            this.cmsMainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiOpen,
-            this.tsmiQuit});
-            this.cmsMainMenu.Name = "cmsMainMenu";
-            this.cmsMainMenu.Size = new System.Drawing.Size(116, 48);
-            // 
-            // tsmiOpen
-            // 
-            this.tsmiOpen.Name = "tsmiOpen";
-            this.tsmiOpen.Size = new System.Drawing.Size(115, 22);
-            this.tsmiOpen.Text = "開く(&O)";
-            this.tsmiOpen.Click += new System.EventHandler(this.tsmiOpen_Click);
-            // 
-            // tsmiQuit
-            // 
-            this.tsmiQuit.Name = "tsmiQuit";
-            this.tsmiQuit.Size = new System.Drawing.Size(115, 22);
-            this.tsmiQuit.Text = "終了(&Q)";
-            this.tsmiQuit.Click += new System.EventHandler(this.tsmiQuit_Click);
+            this.label1.Text = "手元のファイル";
             // 
             // lblReport
             // 
             this.lblReport.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblReport.Location = new System.Drawing.Point(20, 131);
             this.lblReport.Name = "lblReport";
-            this.lblReport.Size = new System.Drawing.Size(499, 59);
+            this.lblReport.Size = new System.Drawing.Size(783, 163);
             this.lblReport.TabIndex = 2;
-            this.lblReport.Text = "label3";
+            this.lblReport.Text = "label3\\t5";
             // 
             // btnVerify
             // 
             this.btnVerify.Enabled = false;
             this.btnVerify.Location = new System.Drawing.Point(212, 84);
             this.btnVerify.Name = "btnVerify";
-            this.btnVerify.Size = new System.Drawing.Size(110, 34);
+            this.btnVerify.Size = new System.Drawing.Size(399, 34);
             this.btnVerify.TabIndex = 3;
             this.btnVerify.Text = "確認する";
             this.btnVerify.UseVisualStyleBackColor = true;
+            this.btnVerify.Click += new System.EventHandler(this.btnVerify_Click);
             // 
-            // button2
+            // btnSynchronize
             // 
-            this.button2.Enabled = false;
-            this.button2.Location = new System.Drawing.Point(99, 211);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(331, 34);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "新しい方に同期する";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnSynchronize.Enabled = false;
+            this.btnSynchronize.Location = new System.Drawing.Point(104, 309);
+            this.btnSynchronize.Name = "btnSynchronize";
+            this.btnSynchronize.Size = new System.Drawing.Size(647, 34);
+            this.btnSynchronize.TabIndex = 4;
+            this.btnSynchronize.Text = "新しい方に同期する";
+            this.btnSynchronize.UseVisualStyleBackColor = true;
+            this.btnSynchronize.Click += new System.EventHandler(this.btnSynchronize_Click);
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(538, 269);
-            this.Controls.Add(this.button2);
+            this.ClientSize = new System.Drawing.Size(825, 368);
+            this.Controls.Add(this.btnSynchronize);
             this.Controls.Add(this.btnVerify);
             this.Controls.Add(this.lblReport);
             this.Controls.Add(this.pnlV);
@@ -199,7 +168,6 @@ namespace FileWatcher
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             this.pnlV.ResumeLayout(false);
             this.pnlV.PerformLayout();
-            this.cmsMainMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -211,15 +179,12 @@ namespace FileWatcher
         private System.Windows.Forms.Button btnBrowseTarget;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.NotifyIcon notifyIcon1;
-        private System.Windows.Forms.ContextMenuStrip cmsMainMenu;
-        private System.Windows.Forms.ToolStripMenuItem tsmiOpen;
-        private System.Windows.Forms.ToolStripMenuItem tsmiQuit;
         private System.Windows.Forms.Label lblReport;
         private System.Windows.Forms.Button btnVerify;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnSynchronize;
         private WindowsFormControlsLibrary.TextBoxFWValidation tbxPathOpponent;
         private WindowsFormControlsLibrary.TextBoxFWValidation tbxPathTarget;
+        private System.Windows.Forms.OpenFileDialog ofd;
     }
 }
 
