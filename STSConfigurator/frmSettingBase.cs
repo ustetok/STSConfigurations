@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -14,21 +15,34 @@ namespace STSConfigurator
 {
     public partial class frmSettingBase : Form
     {
+        public frmSettingsMain ownerForm;
+        public virtual CLSSaveData ClassSaveData { get { return null; } }
+        private bool modified = false;
+        protected bool FormModified
+        {
+            get { return modified; }
+            set
+            {
+                modified = value;
+                ownerForm.ChangeTreeNodeBold(this.Title, value);
+            }
+        }
         public frmSettingBase SettingOwner { get; set; }
-        [XmlIgnore()]
         public static string FilePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\STS3Settings\";
-        [XmlIgnore()]
         public frmSettingBase SettingForm { get; set; }
-        [XmlIgnore()]
         public string Title
         {
             get { return lblTitle.Text; }
             set { lblTitle.Text = value; }
         }
-        public frmSettingBase()
+        public frmSettingBase() 
         {
             InitializeComponent();
             TopLevel = false;
+        }
+        public void SetOwnerForm(frmSettingsMain frm)
+        {
+            ownerForm = frm;
         }
         #region static method
         public static bool ExsistFile(string title)
@@ -53,23 +67,31 @@ namespace STSConfigurator
             }
             else return null;
         }
-        #endregion
-        public void SaveToXmlFile(frmSettingBase frmB)
+        public void SaveToXmlFile(frmSettingBase frmsettingbase)
         {
-            using (StreamWriter sw = new StreamWriter(GetFilename(frmB.Title), false, new UTF8Encoding(false)))
+            frmSettingBase.CLSSaveData csd = frmsettingbase.ClassSaveData;
+            var xmlserializer = new XmlSerializer(csd.GetType());
+            using (TextWriter tw = new StreamWriter(frmSettingBase.GetFilename(frmsettingbase.Title)))
             {
                 try
                 {
-                    System.Xml.Serialization.XmlSerializer xs = new System.Xml.Serialization.XmlSerializer(frmB.GetType());
-                    xs.Serialize(sw, frmB);
+                    xmlserializer.Serialize(tw, csd);
+                    tw.Flush();
                 }
-                catch (Exception e)
+                catch (Exception ee)
                 {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine(ee.Message);
                     throw;
                 }
             }
         }
 
+        #endregion
+        public virtual void AcceptData() { }
+        [Serializable()]
+        public class CLSSaveData
+        {
+            public CLSSaveData() { }
+        }
     }
 }

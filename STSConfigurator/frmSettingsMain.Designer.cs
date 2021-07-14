@@ -31,6 +31,7 @@ namespace STSConfigurator
         {
             this.pnl = new System.Windows.Forms.Panel();
             this.tv = new System.Windows.Forms.TreeView();
+            this.btnConfirm = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // pnl
@@ -40,7 +41,7 @@ namespace STSConfigurator
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pnl.Location = new System.Drawing.Point(269, 12);
             this.pnl.Name = "pnl";
-            this.pnl.Size = new System.Drawing.Size(415, 676);
+            this.pnl.Size = new System.Drawing.Size(415, 635);
             this.pnl.TabIndex = 1;
             // 
             // tv
@@ -53,11 +54,22 @@ namespace STSConfigurator
             this.tv.TabIndex = 2;
             this.tv.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.Tv_AfterSelect);
             // 
+            // btnConfirm
+            // 
+            this.btnConfirm.Location = new System.Drawing.Point(558, 663);
+            this.btnConfirm.Name = "btnConfirm";
+            this.btnConfirm.Size = new System.Drawing.Size(126, 25);
+            this.btnConfirm.TabIndex = 3;
+            this.btnConfirm.Text = "O K";
+            this.btnConfirm.UseVisualStyleBackColor = true;
+            this.btnConfirm.Click += new System.EventHandler(this.btnConfirm_Click);
+            // 
             // frmSettingsMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(696, 700);
+            this.Controls.Add(this.btnConfirm);
             this.Controls.Add(this.tv);
             this.Controls.Add(this.pnl);
             this.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
@@ -67,6 +79,7 @@ namespace STSConfigurator
             this.Name = "frmSettingsMain";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.SettingMain_Load);
+            this.Shown += new System.EventHandler(this.frmSettingsMain_Shown);
             this.ResumeLayout(false);
 
         }
@@ -74,6 +87,7 @@ namespace STSConfigurator
         #endregion
         private System.Windows.Forms.Panel pnl;
         private System.Windows.Forms.TreeView tv;
+        private System.Windows.Forms.Button btnConfirm;
     }
 }
 

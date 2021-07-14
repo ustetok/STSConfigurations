@@ -54,6 +54,7 @@ namespace STSConfigurator
             this.cbxDatabase.Name = "cbxDatabase";
             this.cbxDatabase.Size = new System.Drawing.Size(279, 26);
             this.cbxDatabase.TabIndex = 3;
+            this.cbxDatabase.DropDown += new System.EventHandler(this.cbxDatabase_DropDown);
             // 
             // frmSettingDatabase
             // 
@@ -66,6 +67,7 @@ namespace STSConfigurator
             this.Text = "frmSettingDatabase";
             this.Title = "データベース接続";
             this.Load += new System.EventHandler(this.frmSettingDatabase_Load);
+            this.Shown += new System.EventHandler(this.frmSettingDatabase_Shown);
             this.Controls.SetChildIndex(this.lblTitle, 0);
             this.Controls.SetChildIndex(this.cbxServer, 0);
             this.Controls.SetChildIndex(this.cbxDatabase, 0);
