@@ -49,10 +49,12 @@ namespace STSConfigurator
                 ServerName = ((CLSSaveDataDatabase)sett).ServerName;
                 DatabaseName = ((CLSSaveDataDatabase)sett).DatabaseName;
 
-                cbxServer.Text = ServerName;
+                cbxMServer.Text = ServerName;
                 List<string> dummy = new List<string>() { DatabaseName };
-                cbxDatabase.DataSource = dummy;
-                cbxDatabase.SelectedIndex = 0;
+                cbxMDatabase.DataSource = dummy;
+                cbxMDatabase.SelectedIndex = 0;
+                cbxMServer.Original = cbxMServer.Text;
+                cbxMDatabase.Original = cbxMDatabase.Text;
             }
         }
 
@@ -62,11 +64,11 @@ namespace STSConfigurator
             servers = SqlDataSourceEnumerator.Instance.GetDataSources();
             List<string> svrs = (from DataRow r in servers.AsEnumerable()
                                  select r.ItemArray[0].ToString() + (r.ItemArray[1].ToString() == string.Empty ? "" : @"\" + r.ItemArray[1].ToString())).ToList();
-            cbxServer.DataSource = svrs;
+            cbxMServer.DataSource = svrs;
             Cursor = Cursors.Default;
 
         }
-                private void cbxDatabase_DropDown(object sender, EventArgs e)
+        private void cbxDatabase_DropDown(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
             using (SqlConnection connection = new SqlConnection())
@@ -74,8 +76,8 @@ namespace STSConfigurator
                 List<string> dbNames = new List<string>();
                 try
                 {
-                    cbxDatabase.DataSource = null;
-                    connection.ConnectionString = "Data Source=" + cbxServer.Text + ";Integrated Security=SSPI";
+                    cbxMDatabase.DataSource = null;
+                    connection.ConnectionString = "Data Source=" + cbxMServer.Text + ";Integrated Security=SSPI";
                     connection.Open();
                     SqlCommand command = new SqlCommand();
                     command.Connection = connection;
@@ -87,7 +89,7 @@ namespace STSConfigurator
                     }
                     reader.Close();
 
-                    cbxDatabase.DataSource = dbNames;
+                    cbxMDatabase.DataSource = dbNames;
                 }
                 catch (Exception ee)
                 {
@@ -98,8 +100,8 @@ namespace STSConfigurator
         }
         public override void AcceptData()
         {
-            ServerName= saveDataDatabase.ServerName = cbxServer.Text;
-            DatabaseName = saveDataDatabase.DatabaseName = cbxDatabase.Text;
+            ServerName= saveDataDatabase.ServerName = cbxMServer.Text;
+            DatabaseName = saveDataDatabase.DatabaseName = cbxMDatabase.Text;
         }
         [Serializable()]
         public class CLSSaveDataDatabase : CLSSaveData
@@ -111,13 +113,13 @@ namespace STSConfigurator
 
         private void DatasChanged(object sender, EventArgs e)
         {
-            FormModified = true;
+            FormModified = cbxMServer.Modified || cbxMDatabase.Modified;
         }
 
         private void frmSettingDatabase_Shown(object sender, EventArgs e)
         {
-            //this.cbxServer.TextChanged += new System.EventHandler(this.DatasChanged);
-            //this.cbxDatabase.TextChanged += new System.EventHandler(this.DatasChanged);
+            this.cbxMServer.TextChanged += new System.EventHandler(this.DatasChanged);
+            this.cbxMDatabase.TextChanged += new System.EventHandler(this.DatasChanged);
 
         }
     }

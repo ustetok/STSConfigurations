@@ -18,7 +18,7 @@ namespace STSConfigurator
         public frmSettingsMain ownerForm;
         public virtual CLSSaveData ClassSaveData { get { return null; } }
         private bool modified = false;
-        protected bool FormModified
+        public bool FormModified
         {
             get { return modified; }
             set

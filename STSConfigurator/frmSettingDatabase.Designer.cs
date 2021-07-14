@@ -29,8 +29,8 @@ namespace STSConfigurator
         /// </summary>
         private void InitializeComponent()
         {
-            this.cbxServer = new System.Windows.Forms.ComboBox();
-            this.cbxDatabase = new System.Windows.Forms.ComboBox();
+            this.cbxMServer = new WindowsFormControlsLibrary.ComboBoxModified();
+            this.cbxMDatabase = new WindowsFormControlsLibrary.ComboBoxModified();
             this.SuspendLayout();
             // 
             // lblTitle
@@ -38,46 +38,47 @@ namespace STSConfigurator
             this.lblTitle.Location = new System.Drawing.Point(8, 6);
             this.lblTitle.Text = "データベース接続";
             // 
-            // cbxServer
+            // cbxMServer
             // 
-            this.cbxServer.FormattingEnabled = true;
-            this.cbxServer.Location = new System.Drawing.Point(29, 98);
-            this.cbxServer.Name = "cbxServer";
-            this.cbxServer.Size = new System.Drawing.Size(279, 26);
-            this.cbxServer.TabIndex = 2;
-            this.cbxServer.DropDown += new System.EventHandler(this.cbxServer_DropDown);
+            this.cbxMServer.FormattingEnabled = true;
+            this.cbxMServer.Location = new System.Drawing.Point(29, 140);
+            this.cbxMServer.Name = "cbxMServer";
+            this.cbxMServer.Original = null;
+            this.cbxMServer.Size = new System.Drawing.Size(279, 26);
+            this.cbxMServer.TabIndex = 4;
+            this.cbxMServer.DropDown += new System.EventHandler(this.cbxServer_DropDown);
             // 
-            // cbxDatabase
+            // cbxMDatabase
             // 
-            this.cbxDatabase.FormattingEnabled = true;
-            this.cbxDatabase.Location = new System.Drawing.Point(29, 203);
-            this.cbxDatabase.Name = "cbxDatabase";
-            this.cbxDatabase.Size = new System.Drawing.Size(279, 26);
-            this.cbxDatabase.TabIndex = 3;
-            this.cbxDatabase.DropDown += new System.EventHandler(this.cbxDatabase_DropDown);
+            this.cbxMDatabase.FormattingEnabled = true;
+            this.cbxMDatabase.Location = new System.Drawing.Point(29, 247);
+            this.cbxMDatabase.Name = "cbxMDatabase";
+            this.cbxMDatabase.Original = null;
+            this.cbxMDatabase.Size = new System.Drawing.Size(279, 26);
+            this.cbxMDatabase.TabIndex = 5;
+            this.cbxMDatabase.DropDown += new System.EventHandler(this.cbxDatabase_DropDown);
             // 
             // frmSettingDatabase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(474, 682);
-            this.Controls.Add(this.cbxDatabase);
-            this.Controls.Add(this.cbxServer);
+            this.Controls.Add(this.cbxMDatabase);
+            this.Controls.Add(this.cbxMServer);
             this.Name = "frmSettingDatabase";
             this.Text = "frmSettingDatabase";
             this.Title = "データベース接続";
             this.Load += new System.EventHandler(this.frmSettingDatabase_Load);
             this.Shown += new System.EventHandler(this.frmSettingDatabase_Shown);
             this.Controls.SetChildIndex(this.lblTitle, 0);
-            this.Controls.SetChildIndex(this.cbxServer, 0);
-            this.Controls.SetChildIndex(this.cbxDatabase, 0);
+            this.Controls.SetChildIndex(this.cbxMServer, 0);
+            this.Controls.SetChildIndex(this.cbxMDatabase, 0);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.ComboBox cbxServer;
-        private System.Windows.Forms.ComboBox cbxDatabase;
+        private WindowsFormControlsLibrary.ComboBoxModified cbxMServer;
+        private WindowsFormControlsLibrary.ComboBoxModified cbxMDatabase;
     }
 }

@@ -73,6 +73,7 @@ namespace STSConfigurator
                 var fsb = pnl.Controls[0] as frmSettingBase;
                 fsb.AcceptData();
                 fsb.SaveToXmlFile(fsb);
+                fsb.FormModified = false;
             }
         }
 
