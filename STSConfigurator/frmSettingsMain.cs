@@ -14,6 +14,7 @@ namespace STSConfigurator
 {
     public partial class frmSettingsMain : Form
     {
+        private TreeNode currentNode = null;
         private TreeNodeEx tnRoot = new TreeNodeEx("設定");
         public frmSettingsMain()
         {
@@ -21,9 +22,14 @@ namespace STSConfigurator
         }
         private void SettingMain_Load(object sender, EventArgs e)
         {
-            TreeNodeEx tn = new TreeNodeEx(new frmSettingDatabase(this));
+            TreeNodeEx tn0 = new TreeNodeEx(new frmSettingDatabase(this));
+            tnRoot.Nodes.Add(tn0);
+            TreeNodeEx tn1 = new TreeNodeEx("共通設定");
+            tnRoot.Nodes.Add(tn1);
+            TreeNodeEx tn2 = new TreeNodeEx("個別設定");
+            tnRoot.Nodes.Add(tn2);
             //tnRoot.Nodes.Add(new TreeNodeEx(new frmSettingDatabase()));
-            tnRoot.Nodes.Add(tn);
+            //tnRoot.Nodes.Add(tn);
 
 
             //tnRoot.Nodes.Add(new TreeNodeEx(new SetConnectDB("データベース接続", new frmConnectDB())));
@@ -38,25 +44,45 @@ namespace STSConfigurator
             //tnRoot.Nodes["カルテ"].Nodes.Add(new TreeNodeEx(new SetCartePhotoOrder("写真の登録順", new frmCartePhotoOrder())));
 
             tv.Nodes.Add(tnRoot);
-            tnRoot.Expand();
+            tnRoot.ExpandAll();
         }
-        private void frmSettingsMain_Shown(object sender, EventArgs e)
+        public void ModifiedChanged(string treeNodeName, bool isModified)
         {
-            
-
+            btnConfirm.Enabled = isModified;
+            FindTreeNode(treeNodeName).Bold = isModified;
         }
-        public void ChangeTreeNodeBold(string treeNodeName, bool isBold)
+        private void tv_BeforeSelect(object sender, TreeViewCancelEventArgs e)
         {
-            FindTreeNode(treeNodeName).Bold = isBold;
+            if (currentNode != null)
+            {
+                frmSettingBase frm = ((TreeNodeEx)currentNode).FormSetting;
+                if (frm != null && frm.FormModified)
+                {
+                    DialogResult dr = MessageBox.Show("保存しますか？", "設定が変更されていますが...", MessageBoxButtons.YesNoCancel);
+                    switch (dr)
+                    {
+                        case DialogResult.Yes: btnConfirm_Click(null, null); break;
+                        case DialogResult.No: frm.ResumeToOrigin(); break;
+                        case DialogResult.Cancel:e.Cancel = true;break;
+                    }
+                }
+            }
         }
         private void Tv_AfterSelect(object sender, TreeViewEventArgs e)
         {
             pnl.Controls.Clear();
+            currentNode = e.Node;
             if (((TreeNodeEx)e.Node).FormSetting != null)
             {
-                pnl.Controls.Add((frmSettingBase)((TreeNodeEx)e.Node).FormSetting);
-                ((frmSettingBase)((TreeNodeEx)e.Node).FormSetting).Show();
+                frmSettingBase form = adjustFormSize((frmSettingBase)((TreeNodeEx)e.Node).FormSetting);
+                pnl.Controls.Add(form);
+                form.Show();
             }
+        }
+        private frmSettingBase adjustFormSize(frmSettingBase f)
+        {
+            f.Size = new Size(pnl.Width, pnl.Height);
+            return f;
         }
         private TreeNodeEx FindTreeNode(string treeNodeName)
         {
@@ -72,10 +98,18 @@ namespace STSConfigurator
             {
                 var fsb = pnl.Controls[0] as frmSettingBase;
                 fsb.AcceptData();
+                fsb.SetOrigin();
                 fsb.SaveToXmlFile(fsb);
                 fsb.FormModified = false;
             }
         }
-
+        private void pnl_SizeChanged(object sender, EventArgs e)
+        {
+            if(pnl.Controls.OfType<frmSettingBase>().Count<frmSettingBase>() >0)
+            {
+                frmSettingBase frm = adjustFormSize(pnl.Controls.OfType<frmSettingBase>().First<frmSettingBase>());
+                frm.Show();
+            }
+        }
     }
 }

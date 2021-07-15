@@ -53,11 +53,20 @@ namespace STSConfigurator
                 List<string> dummy = new List<string>() { DatabaseName };
                 cbxMDatabase.DataSource = dummy;
                 cbxMDatabase.SelectedIndex = 0;
-                cbxMServer.Original = cbxMServer.Text;
-                cbxMDatabase.Original = cbxMDatabase.Text;
+                SetOrigin();
             }
         }
-
+        public override void SetOrigin()
+        {
+            cbxMServer.Original = cbxMServer.Text;
+            cbxMDatabase.Original = cbxMDatabase.Text;
+        }
+        public override void ResumeToOrigin()
+        {
+            cbxMServer.Text = cbxMServer.Original;
+            cbxMDatabase.Text = cbxMDatabase.Original;
+            this.FormModified = false;
+        }
         private void cbxServer_DropDown(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
@@ -103,14 +112,6 @@ namespace STSConfigurator
             ServerName= saveDataDatabase.ServerName = cbxMServer.Text;
             DatabaseName = saveDataDatabase.DatabaseName = cbxMDatabase.Text;
         }
-        [Serializable()]
-        public class CLSSaveDataDatabase : CLSSaveData
-        {
-            public CLSSaveDataDatabase() { }
-            public string ServerName;
-            public string DatabaseName;
-        }
-
         private void DatasChanged(object sender, EventArgs e)
         {
             FormModified = cbxMServer.Modified || cbxMDatabase.Modified;
@@ -120,7 +121,14 @@ namespace STSConfigurator
         {
             this.cbxMServer.TextChanged += new System.EventHandler(this.DatasChanged);
             this.cbxMDatabase.TextChanged += new System.EventHandler(this.DatasChanged);
-
         }
+        [Serializable()]
+        public class CLSSaveDataDatabase : CLSSaveData
+        {
+            public CLSSaveDataDatabase() { }
+            public string ServerName;
+            public string DatabaseName;
+        }
+
     }
 }

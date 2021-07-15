@@ -24,10 +24,9 @@ namespace STSConfigurator
             set
             {
                 modified = value;
-                ownerForm.ChangeTreeNodeBold(this.Title, value);
+                ownerForm.ModifiedChanged(this.Title, value);
             }
         }
-        public frmSettingBase SettingOwner { get; set; }
         public static string FilePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\STS3Settings\";
         public frmSettingBase SettingForm { get; set; }
         public string Title
@@ -44,6 +43,8 @@ namespace STSConfigurator
         {
             ownerForm = frm;
         }
+        public virtual void SetOrigin() { }
+        public virtual void ResumeToOrigin() { }
         #region static method
         public static bool ExsistFile(string title)
         {
@@ -55,6 +56,7 @@ namespace STSConfigurator
 
             return FilePath + title + ".config";
         }
+        #endregion
         public static object LoadFromXmlFile(Type type, string title)
         {
             if (File.Exists(GetFilename(title)))
@@ -85,8 +87,6 @@ namespace STSConfigurator
                 }
             }
         }
-
-        #endregion
         public virtual void AcceptData() { }
         [Serializable()]
         public class CLSSaveData
