@@ -28,6 +28,8 @@ namespace STSConfigurator
             tnRoot.Nodes.Add(tn1);
             TreeNodeEx tn2 = new TreeNodeEx("個別設定");
             tnRoot.Nodes.Add(tn2);
+            TreeNodeEx tn11 = new TreeNodeEx(new frmSettingClinic(this));
+            tn1.Nodes.Add(tn11);
             //tnRoot.Nodes.Add(new TreeNodeEx(new frmSettingDatabase()));
             //tnRoot.Nodes.Add(tn);
 

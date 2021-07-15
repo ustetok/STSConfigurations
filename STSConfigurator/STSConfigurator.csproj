@@ -56,6 +56,12 @@
     <Compile Include="frmSettingBase.Designer.cs">
       <DependentUpon>frmSettingBase.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmSettingClinic.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSettingClinic.Designer.cs">
+      <DependentUpon>frmSettingClinic.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmSettingDatabase.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -76,6 +82,9 @@
     </Compile>
     <EmbeddedResource Include="frmSettingBase.resx">
       <DependentUpon>frmSettingBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSettingClinic.resx">
+      <DependentUpon>frmSettingClinic.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmSettingDatabase.resx">
       <DependentUpon>frmSettingDatabase.cs</DependentUpon>
