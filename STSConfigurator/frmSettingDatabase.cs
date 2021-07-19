@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.Sql;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -36,9 +37,12 @@ namespace STSConfigurator
             InitializeComponent();
             saveDataDatabase = new CLSSaveDataDatabase();
         }
-        public frmSettingDatabase(frmSettingsMain ownerForm) : this()
+        public frmSettingDatabase(frmSettingsMain ownerForm, string formTitle, bool isHeader) : this()
         {
+            this.Title = formTitle;
+            this.HeadingForm = isHeader;
             SetOwnerForm(ownerForm);
+            tbxDirectoryWorking.Text = Application.UserAppDataPath;
         }
 
         private void frmSettingDatabase_Load(object sender, EventArgs e)
@@ -65,6 +69,7 @@ namespace STSConfigurator
         {
             cbxMServer.Text = cbxMServer.Original;
             cbxMDatabase.Text = cbxMDatabase.Original;
+            tsmiDefault_Click(null, null);
             this.FormModified = false;
         }
         private void cbxServer_DropDown(object sender, EventArgs e)
@@ -116,7 +121,6 @@ namespace STSConfigurator
         {
             FormModified = cbxMServer.Modified || cbxMDatabase.Modified;
         }
-
         private void frmSettingDatabase_Shown(object sender, EventArgs e)
         {
             this.cbxMServer.TextChanged += new System.EventHandler(this.DatasChanged);
@@ -130,5 +134,25 @@ namespace STSConfigurator
             public string DatabaseName;
         }
 
+        private void btnOpenDialog_Click(object sender, EventArgs e)
+        {
+            FBDialog.SelectedPath = Directory.Exists(tbxDirectoryWorking.Text) ? Path.GetDirectoryName(tbxDirectoryWorking.Text) : Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            
+            DialogResult dr = FBDialog.ShowDialog();
+            if (dr == DialogResult.OK) tbxDirectoryWorking.Text = FBDialog.SelectedPath + "\\";
+        }
+
+        private void tsmiDefault_Click(object sender, EventArgs e)
+        {
+            tbxDirectoryWorking.Text = Application.UserAppDataPath;
+        }
+
+        private void tbxDirectoryWorking_Validating(object sender, CancelEventArgs e)
+        {
+            if(FormModified && Directory.Exists(tbxDirectoryWorking.Text))
+            {
+                if (!tbxDirectoryWorking.Text.EndsWith("\\")) tbxDirectoryWorking.Text += "\\";
+            }
+        }
     }
 }

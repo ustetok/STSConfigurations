@@ -15,21 +15,27 @@ namespace STSConfigurator
     public partial class frmSettingsMain : Form
     {
         private TreeNode currentNode = null;
-        private TreeNodeEx tnRoot = new TreeNodeEx("設定");
+        private TreeNodeEx tnRoot;// = new TreeNodeEx("設定");
+        private frmSettingBase formTarget { get { return ((TreeNodeEx)currentNode).FormSetting; } }
         public frmSettingsMain()
         {
             InitializeComponent();
         }
         private void SettingMain_Load(object sender, EventArgs e)
         {
-            TreeNodeEx tn0 = new TreeNodeEx(new frmSettingDatabase(this));
-            tnRoot.Nodes.Add(tn0);
-            TreeNodeEx tn1 = new TreeNodeEx("共通設定");
+            tnRoot = new TreeNodeEx(new frmSettingBase("設定", true));
+            TreeNodeEx tn1 = new TreeNodeEx(new frmSettingDatabase(this, "● データベース接続および初期設定", false));
             tnRoot.Nodes.Add(tn1);
-            TreeNodeEx tn2 = new TreeNodeEx("個別設定");
+            TreeNodeEx tn2 = new TreeNodeEx(new frmSettingBase("院内共通設定", true));
             tnRoot.Nodes.Add(tn2);
-            TreeNodeEx tn11 = new TreeNodeEx(new frmSettingClinic(this));
-            tn1.Nodes.Add(tn11);
+            //TreeNodeEx tn0 = new TreeNodeEx(new frmSettingDatabase(this));
+            //tnRoot.Nodes.Add(tn0);
+            //TreeNodeEx tn1 = new TreeNodeEx("共通設定");
+            //tnRoot.Nodes.Add(tn1);
+            //TreeNodeEx tn2 = new TreeNodeEx("個別設定");
+            //tnRoot.Nodes.Add(tn2);
+            //TreeNodeEx tn11 = new TreeNodeEx(new frmSettingClinic(this));
+            //tn1.Nodes.Add(tn11);
             //tnRoot.Nodes.Add(new TreeNodeEx(new frmSettingDatabase()));
             //tnRoot.Nodes.Add(tn);
 
@@ -51,25 +57,43 @@ namespace STSConfigurator
         public void ModifiedChanged(string treeNodeName, bool isModified)
         {
             btnConfirm.Enabled = isModified;
+            btnReturnToOriginal.Enabled = isModified;
             FindTreeNode(treeNodeName).Bold = isModified;
+        }
+        private void btnReturnToOriginal_Click(object sender, EventArgs e)
+        {
+            formTarget.ResumeToOrigin();
         }
         private void tv_BeforeSelect(object sender, TreeViewCancelEventArgs e)
         {
             if (currentNode != null)
             {
-                frmSettingBase frm = ((TreeNodeEx)currentNode).FormSetting;
-                if (frm != null && frm.FormModified)
+                //frmSettingBase frm = ((TreeNodeEx)currentNode).FormSetting;
+                var node = tnRoot.Nodes.Find(e.Node.Name, true);
+
+                if (formTarget.FormModified)                                  //変更があるなら
                 {
                     DialogResult dr = MessageBox.Show("保存しますか？", "設定が変更されていますが...", MessageBoxButtons.YesNoCancel);
                     switch (dr)
                     {
                         case DialogResult.Yes: btnConfirm_Click(null, null); break;
-                        case DialogResult.No: frm.ResumeToOrigin(); break;
-                        case DialogResult.Cancel:e.Cancel = true;break;
+                        case DialogResult.No: formTarget.ResumeToOrigin(); break;
+                        case DialogResult.Cancel: e.Cancel = true; break;
                     }
+                }
+                
+                if (node.Count<TreeNode>() == 0)                            //tnRootなら
+                {
+                    e.Cancel = true;
+                    return;
+                }
+                else if (((TreeNodeEx)node[0]).FormSetting.HeadingForm)     //見出しの場合
+                {
+                    tv.SelectedNode = node[0].NextNode;
                 }
             }
         }
+        
         private void Tv_AfterSelect(object sender, TreeViewEventArgs e)
         {
             pnl.Controls.Clear();
@@ -98,7 +122,7 @@ namespace STSConfigurator
         {
             if(pnl.Controls.Count>0)
             {
-                var fsb = pnl.Controls[0] as frmSettingBase;
+                var fsb = pnl.Controls.OfType<frmSettingBase>().First<frmSettingBase>();
                 fsb.AcceptData();
                 fsb.SetOrigin();
                 fsb.SaveToXmlFile(fsb);
@@ -113,5 +137,6 @@ namespace STSConfigurator
                 frm.Show();
             }
         }
+
     }
 }

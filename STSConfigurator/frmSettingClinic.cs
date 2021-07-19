@@ -16,6 +16,7 @@ namespace STSConfigurator
         {
             InitializeComponent();
             classSaveDataClinic = new CLSSaveDataClinic();
+            HeadingForm = true;
         }
         public frmSettingClinic(frmSettingsMain ownerForm):this()
         {

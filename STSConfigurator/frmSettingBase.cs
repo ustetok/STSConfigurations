@@ -16,6 +16,7 @@ namespace STSConfigurator
     public partial class frmSettingBase : Form
     {
         public frmSettingsMain ownerForm;
+        public bool HeadingForm { get; set; }
         public virtual CLSSaveData ClassSaveData { get { return null; } }
         private bool modified = false;
         public bool FormModified
@@ -39,6 +40,11 @@ namespace STSConfigurator
             InitializeComponent();
             TopLevel = false;
         }
+        public frmSettingBase(string formTitle, bool isHeader):this()
+        {
+            Title = formTitle;
+            HeadingForm = isHeader;
+        }
         public void SetOwnerForm(frmSettingsMain frm)
         {
             ownerForm = frm;
@@ -56,7 +62,6 @@ namespace STSConfigurator
 
             return FilePath + title + ".config";
         }
-        #endregion
         public static object LoadFromXmlFile(Type type, string title)
         {
             if (File.Exists(GetFilename(title)))
@@ -69,6 +74,7 @@ namespace STSConfigurator
             }
             else return null;
         }
+        #endregion
         public void SaveToXmlFile(frmSettingBase frmsettingbase)
         {
             frmSettingBase.CLSSaveData csd = frmsettingbase.ClassSaveData;

@@ -28,17 +28,13 @@ namespace STSConfigurator
         {
             FormSetting = null;
             this.Name = txt;
-
             Font f = new Font("メイリオ", 9.0f);
             this.NodeFont = f;
         }
-        public TreeNodeEx(frmSettingBase b) : base(b.Title)
+        public TreeNodeEx(frmSettingBase b) : this(b.Title)
         {
             FormSetting = b;
             this.Name = b.lblTitle.Text;
-
-            Font f = new Font("メイリオ", 9.0f);
-            this.NodeFont = f;
         }
     }
 }

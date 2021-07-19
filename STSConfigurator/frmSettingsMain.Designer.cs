@@ -32,6 +32,7 @@ namespace STSConfigurator
             this.pnl = new System.Windows.Forms.Panel();
             this.tv = new System.Windows.Forms.TreeView();
             this.btnConfirm = new System.Windows.Forms.Button();
+            this.btnReturnToOriginal = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // pnl
@@ -41,7 +42,7 @@ namespace STSConfigurator
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pnl.Location = new System.Drawing.Point(269, 12);
             this.pnl.Name = "pnl";
-            this.pnl.Size = new System.Drawing.Size(424, 505);
+            this.pnl.Size = new System.Drawing.Size(566, 505);
             this.pnl.TabIndex = 1;
             this.pnl.SizeChanged += new System.EventHandler(this.pnl_SizeChanged);
             // 
@@ -60,7 +61,7 @@ namespace STSConfigurator
             // 
             this.btnConfirm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnConfirm.Enabled = false;
-            this.btnConfirm.Location = new System.Drawing.Point(567, 533);
+            this.btnConfirm.Location = new System.Drawing.Point(709, 533);
             this.btnConfirm.Name = "btnConfirm";
             this.btnConfirm.Size = new System.Drawing.Size(126, 25);
             this.btnConfirm.TabIndex = 3;
@@ -68,11 +69,23 @@ namespace STSConfigurator
             this.btnConfirm.UseVisualStyleBackColor = true;
             this.btnConfirm.Click += new System.EventHandler(this.btnConfirm_Click);
             // 
+            // btnReturnToOriginal
+            // 
+            this.btnReturnToOriginal.Enabled = false;
+            this.btnReturnToOriginal.Location = new System.Drawing.Point(500, 533);
+            this.btnReturnToOriginal.Name = "btnReturnToOriginal";
+            this.btnReturnToOriginal.Size = new System.Drawing.Size(91, 24);
+            this.btnReturnToOriginal.TabIndex = 4;
+            this.btnReturnToOriginal.Text = "変更前に戻す";
+            this.btnReturnToOriginal.UseVisualStyleBackColor = true;
+            this.btnReturnToOriginal.Click += new System.EventHandler(this.btnReturnToOriginal_Click);
+            // 
             // frmSettingsMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(705, 570);
+            this.ClientSize = new System.Drawing.Size(847, 570);
+            this.Controls.Add(this.btnReturnToOriginal);
             this.Controls.Add(this.btnConfirm);
             this.Controls.Add(this.tv);
             this.Controls.Add(this.pnl);
@@ -91,6 +104,7 @@ namespace STSConfigurator
         private System.Windows.Forms.Panel pnl;
         private System.Windows.Forms.TreeView tv;
         private System.Windows.Forms.Button btnConfirm;
+        private System.Windows.Forms.Button btnReturnToOriginal;
     }
 }
 
