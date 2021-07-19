@@ -21,6 +21,7 @@ namespace STSConfigurator
         public override CLSSaveData ClassSaveData { get { return saveDataDatabase; } }
         public string ServerName { get; set; }
         public string DatabaseName { get; set; }
+        public string DirectoryWorking { get; set; }
         public static string ConnectingString
         {
             get
@@ -52,18 +53,22 @@ namespace STSConfigurator
             {
                 ServerName = ((CLSSaveDataDatabase)sett).ServerName;
                 DatabaseName = ((CLSSaveDataDatabase)sett).DatabaseName;
+                DirectoryWorking = ((CLSSaveDataDatabase)sett).DirectoryWorking;
 
                 cbxMServer.Text = ServerName;
                 List<string> dummy = new List<string>() { DatabaseName };
                 cbxMDatabase.DataSource = dummy;
                 cbxMDatabase.SelectedIndex = 0;
+                tbxDirectoryWorking.Text = DirectoryWorking;
                 SetOrigin();
             }
+            btnDBTestEnable();
         }
         public override void SetOrigin()
         {
             cbxMServer.Original = cbxMServer.Text;
             cbxMDatabase.Original = cbxMDatabase.Text;
+            tbxDirectoryWorking.Originalstring = tbxDirectoryWorking.Text;
         }
         public override void ResumeToOrigin()
         {
@@ -114,30 +119,30 @@ namespace STSConfigurator
         }
         public override void AcceptData()
         {
-            ServerName= saveDataDatabase.ServerName = cbxMServer.Text;
+            ServerName = saveDataDatabase.ServerName = cbxMServer.Text;
             DatabaseName = saveDataDatabase.DatabaseName = cbxMDatabase.Text;
+            DirectoryWorking = saveDataDatabase.DirectoryWorking = tbxDirectoryWorking.Text;
         }
         private void DatasChanged(object sender, EventArgs e)
         {
-            FormModified = cbxMServer.Modified || cbxMDatabase.Modified;
+            FormModified = cbxMServer.Modified || cbxMDatabase.Modified || tbxDirectoryWorking.isModified;
+            btnDBTestEnable();
+        }
+        private void btnDBTestEnable()
+        {
+            btnDBTest.Enabled = cbxMServer.Text.Length > 0 && cbxMDatabase.Text.Length > 0;
         }
         private void frmSettingDatabase_Shown(object sender, EventArgs e)
         {
             this.cbxMServer.TextChanged += new System.EventHandler(this.DatasChanged);
             this.cbxMDatabase.TextChanged += new System.EventHandler(this.DatasChanged);
-        }
-        [Serializable()]
-        public class CLSSaveDataDatabase : CLSSaveData
-        {
-            public CLSSaveDataDatabase() { }
-            public string ServerName;
-            public string DatabaseName;
+            this.tbxDirectoryWorking.TextChanged += new EventHandler(this.DatasChanged);
         }
 
         private void btnOpenDialog_Click(object sender, EventArgs e)
         {
             FBDialog.SelectedPath = Directory.Exists(tbxDirectoryWorking.Text) ? Path.GetDirectoryName(tbxDirectoryWorking.Text) : Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            
+
             DialogResult dr = FBDialog.ShowDialog();
             if (dr == DialogResult.OK) tbxDirectoryWorking.Text = FBDialog.SelectedPath + "\\";
         }
@@ -149,10 +154,39 @@ namespace STSConfigurator
 
         private void tbxDirectoryWorking_Validating(object sender, CancelEventArgs e)
         {
-            if(FormModified && Directory.Exists(tbxDirectoryWorking.Text))
+            if (FormModified && Directory.Exists(tbxDirectoryWorking.Text))
             {
                 if (!tbxDirectoryWorking.Text.EndsWith("\\")) tbxDirectoryWorking.Text += "\\";
             }
+        }
+
+        private void btnDBTest_Click(object sender, EventArgs e)
+        {
+            Cursor defaultCursor = Cursor.Current;
+            Cursor = Cursors.WaitCursor;
+            try
+            {
+                string connStr = "Data Source=" + cbxMServer.Text + ";Initial Catalog=" + cbxMDatabase.Text + ";Integrated Security=SSPI";
+
+                using (var conn = new SqlConnection(connStr))
+                {
+                    conn.Open();
+                    MessageBox.Show("ヽ(´▽｀)/～♪", "データベースに接続できました");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "データベースに接続できません");
+            }
+            Cursor = defaultCursor;
+        }
+        [Serializable()]
+        public class CLSSaveDataDatabase : CLSSaveData
+        {
+            public CLSSaveDataDatabase() { }
+            public string ServerName;
+            public string DatabaseName;
+            public string DirectoryWorking;
         }
     }
 }
