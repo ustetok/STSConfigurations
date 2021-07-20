@@ -18,9 +18,10 @@ namespace STSConfigurator
             classSaveDataClinic = new CLSSaveDataClinic();
             HeadingForm = true;
         }
-        public frmSettingClinic(frmSettingsMain ownerForm):this()
+        public frmSettingClinic(frmSettingsMain ownerForm, string title):this()
         {
             SetOwnerForm(ownerForm);
+            Title = title;
         }
     }
     [Serializable()]

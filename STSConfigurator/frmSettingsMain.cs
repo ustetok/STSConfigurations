@@ -14,7 +14,9 @@ namespace STSConfigurator
 {
     public partial class frmSettingsMain : Form
     {
+        private const string CONFIG_DB_NAME = "● データベース接続および初期設定";
         private TreeNode currentNode = null;
+        private bool isFirstTime = true;
         private TreeNodeEx tnRoot;// = new TreeNodeEx("設定");
         private frmSettingBase formTarget { get { return ((TreeNodeEx)currentNode).FormSetting; } }
         public frmSettingsMain()
@@ -23,11 +25,14 @@ namespace STSConfigurator
         }
         private void SettingMain_Load(object sender, EventArgs e)
         {
+
             tnRoot = new TreeNodeEx(new frmSettingBase("設定", true));
-            TreeNodeEx tn1 = new TreeNodeEx(new frmSettingDatabase(this, "● データベース接続および初期設定", false));
+            TreeNodeEx tn1 = new TreeNodeEx(new frmSettingDatabase(this, CONFIG_DB_NAME, false));
             tnRoot.Nodes.Add(tn1);
             TreeNodeEx tn2 = new TreeNodeEx(new frmSettingBase("院内共通設定", true));
             tnRoot.Nodes.Add(tn2);
+            TreeNodeEx tn21 = new TreeNodeEx(new frmSettingClinic(this, "● 医院情報"));
+            tn2.Nodes.Add(tn21);
             //TreeNodeEx tn0 = new TreeNodeEx(new frmSettingDatabase(this));
             //tnRoot.Nodes.Add(tn0);
             //TreeNodeEx tn1 = new TreeNodeEx("共通設定");
@@ -53,6 +58,31 @@ namespace STSConfigurator
 
             tv.Nodes.Add(tnRoot);
             tnRoot.ExpandAll();
+            checkInitialSetting();
+        }
+        private void checkInitialSetting()
+        {
+            if (!File.Exists(frmSettingBase.FilePath + CONFIG_DB_NAME + ".config"))
+            {
+                List<TreeNode> tns = getChildNodes(tnRoot);
+                foreach (TreeNode tn in tns)
+                {
+                    tn.ForeColor = SystemColors.GrayText;
+                }
+                tns.Find(tn => tn.Name == CONFIG_DB_NAME).ForeColor = SystemColors.WindowText;
+            }
+            else isFirstTime = false;
+
+            List<TreeNode> getChildNodes(TreeNode parent)   //再帰処理
+            {
+                var treeNodes = new List<TreeNode>();
+                foreach (TreeNode tn in parent.Nodes)
+                {
+                    treeNodes.Add(tn);
+                    treeNodes.AddRange(getChildNodes(tn));
+                }
+                return treeNodes;
+            }
         }
         public void ModifiedChanged(string treeNodeName, bool isModified)
         {
@@ -66,9 +96,20 @@ namespace STSConfigurator
         }
         private void tv_BeforeSelect(object sender, TreeViewCancelEventArgs e)
         {
+            if (isFirstTime) //データベース接続ファイルが作成されていない場合
+            {
+                foreach (var tn in tnRoot.Nodes.OfType<TreeNodeEx>())
+                {
+                    if (e.Node.Name != CONFIG_DB_NAME)
+                    {
+                        e.Cancel = true;
+                        tv.SelectedNode = currentNode;
+                        return;
+                    }
+                }
+            }
             if (currentNode != null)
             {
-                //frmSettingBase frm = ((TreeNodeEx)currentNode).FormSetting;
                 var node = tnRoot.Nodes.Find(e.Node.Name, true);
 
                 if (formTarget.FormModified)                                  //変更があるなら
@@ -80,6 +121,7 @@ namespace STSConfigurator
                         case DialogResult.No: formTarget.ResumeToOrigin(); break;
                         case DialogResult.Cancel: e.Cancel = true; break;
                     }
+                    return;
                 }
                 
                 if (node.Count<TreeNode>() == 0)                            //tnRootなら
@@ -120,14 +162,18 @@ namespace STSConfigurator
         }
         private void btnConfirm_Click(object sender, EventArgs e)
         {
-            if(pnl.Controls.Count>0)
-            {
-                var fsb = pnl.Controls.OfType<frmSettingBase>().First<frmSettingBase>();
-                fsb.AcceptData();
-                fsb.SetOrigin();
-                fsb.SaveToXmlFile(fsb);
-                fsb.FormModified = false;
-            }
+            formTarget.AcceptData();
+            formTarget.SetOrigin();
+            formTarget.SaveToXmlFile(formTarget);
+            formTarget.FormModified = false;
+            //if(pnl.Controls.Count>0)
+            //{
+            //    var fsb = pnl.Controls.OfType<frmSettingBase>().First<frmSettingBase>();
+            //    fsb.AcceptData();
+            //    fsb.SetOrigin();
+            //    fsb.SaveToXmlFile(fsb);
+            //    fsb.FormModified = false;
+            //}
         }
         private void pnl_SizeChanged(object sender, EventArgs e)
         {

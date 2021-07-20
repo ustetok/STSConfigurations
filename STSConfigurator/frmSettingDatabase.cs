@@ -43,7 +43,6 @@ namespace STSConfigurator
             this.Title = formTitle;
             this.HeadingForm = isHeader;
             SetOwnerForm(ownerForm);
-            tbxDirectoryWorking.Text = Application.UserAppDataPath;
         }
 
         private void frmSettingDatabase_Load(object sender, EventArgs e)
@@ -53,13 +52,11 @@ namespace STSConfigurator
             {
                 ServerName = ((CLSSaveDataDatabase)sett).ServerName;
                 DatabaseName = ((CLSSaveDataDatabase)sett).DatabaseName;
-                DirectoryWorking = ((CLSSaveDataDatabase)sett).DirectoryWorking;
 
                 cbxMServer.Text = ServerName;
                 List<string> dummy = new List<string>() { DatabaseName };
                 cbxMDatabase.DataSource = dummy;
                 cbxMDatabase.SelectedIndex = 0;
-                tbxDirectoryWorking.Text = DirectoryWorking;
                 SetOrigin();
             }
             btnDBTestEnable();
@@ -68,13 +65,11 @@ namespace STSConfigurator
         {
             cbxMServer.Original = cbxMServer.Text;
             cbxMDatabase.Original = cbxMDatabase.Text;
-            tbxDirectoryWorking.Originalstring = tbxDirectoryWorking.Text;
         }
         public override void ResumeToOrigin()
         {
             cbxMServer.Text = cbxMServer.Original;
             cbxMDatabase.Text = cbxMDatabase.Original;
-            tsmiDefault_Click(null, null);
             this.FormModified = false;
         }
         private void cbxServer_DropDown(object sender, EventArgs e)
@@ -121,12 +116,13 @@ namespace STSConfigurator
         {
             ServerName = saveDataDatabase.ServerName = cbxMServer.Text;
             DatabaseName = saveDataDatabase.DatabaseName = cbxMDatabase.Text;
-            DirectoryWorking = saveDataDatabase.DirectoryWorking = tbxDirectoryWorking.Text;
         }
         private void DatasChanged(object sender, EventArgs e)
         {
-            FormModified = cbxMServer.Modified || cbxMDatabase.Modified || tbxDirectoryWorking.isModified;
+            FormModified = cbxMServer.Modified || cbxMDatabase.Modified;
             btnDBTestEnable();
+
+            ((frmSettingsMain)ownerForm).btnConfirm.Enabled = cbxMServer.Text.Length > 0 && cbxMDatabase.Text.Length > 0 ;
         }
         private void btnDBTestEnable()
         {
@@ -136,30 +132,7 @@ namespace STSConfigurator
         {
             this.cbxMServer.TextChanged += new System.EventHandler(this.DatasChanged);
             this.cbxMDatabase.TextChanged += new System.EventHandler(this.DatasChanged);
-            this.tbxDirectoryWorking.TextChanged += new EventHandler(this.DatasChanged);
         }
-
-        private void btnOpenDialog_Click(object sender, EventArgs e)
-        {
-            FBDialog.SelectedPath = Directory.Exists(tbxDirectoryWorking.Text) ? Path.GetDirectoryName(tbxDirectoryWorking.Text) : Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-
-            DialogResult dr = FBDialog.ShowDialog();
-            if (dr == DialogResult.OK) tbxDirectoryWorking.Text = FBDialog.SelectedPath + "\\";
-        }
-
-        private void tsmiDefault_Click(object sender, EventArgs e)
-        {
-            tbxDirectoryWorking.Text = Application.UserAppDataPath;
-        }
-
-        private void tbxDirectoryWorking_Validating(object sender, CancelEventArgs e)
-        {
-            if (FormModified && Directory.Exists(tbxDirectoryWorking.Text))
-            {
-                if (!tbxDirectoryWorking.Text.EndsWith("\\")) tbxDirectoryWorking.Text += "\\";
-            }
-        }
-
         private void btnDBTest_Click(object sender, EventArgs e)
         {
             Cursor defaultCursor = Cursor.Current;
@@ -180,13 +153,14 @@ namespace STSConfigurator
             }
             Cursor = defaultCursor;
         }
+
         [Serializable()]
         public class CLSSaveDataDatabase : CLSSaveData
         {
             public CLSSaveDataDatabase() { }
             public string ServerName;
             public string DatabaseName;
-            public string DirectoryWorking;
         }
+
     }
 }
