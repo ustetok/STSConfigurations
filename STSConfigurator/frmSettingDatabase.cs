@@ -21,27 +21,27 @@ namespace STSConfigurator
         public override CLSSaveData ClassSaveData { get { return saveDataDatabase; } }
         public string ServerName { get; set; }
         public string DatabaseName { get; set; }
-        public string DirectoryWorking { get; set; }
         public static string ConnectingString
         {
             get
             {
-                frmSettingDatabase obj = (frmSettingDatabase)LoadFromXmlFile(typeof(CLSSaveDataDatabase), "データベース接続");
+                frmSettingDatabase obj = (frmSettingDatabase)LoadFromXmlFile(typeof(CLSSaveDataDatabase), "● データベース接続および初期設定");
                 if (obj == null) return "";
                 return "Data Source=" + obj.ServerName + ";Initial Catalog=" + obj.DatabaseName + ";Integrated Security=SSPI";
             }
         }
         private DataTable servers;
-
+        
         public frmSettingDatabase()
         {
             InitializeComponent();
             saveDataDatabase = new CLSSaveDataDatabase();
+            SaveToSQL = false;
         }
-        public frmSettingDatabase(frmSettingsMain ownerForm, string formTitle, bool isHeader) : this()
+        public frmSettingDatabase(frmSettingsMain ownerForm, string formTitle) : this()
         {
             this.Title = formTitle;
-            this.HeadingForm = isHeader;
+            this.HeadingForm = false;
             SetOwnerForm(ownerForm);
         }
 

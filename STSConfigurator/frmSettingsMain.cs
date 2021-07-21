@@ -14,7 +14,7 @@ namespace STSConfigurator
 {
     public partial class frmSettingsMain : Form
     {
-        private const string CONFIG_DB_NAME = "● データベース接続および初期設定";
+        public const string CONFIG_DB_NAME = "● データベース接続および初期設定";
         private TreeNode currentNode = null;
         private bool isFirstTime = true;
         private TreeNodeEx tnRoot;// = new TreeNodeEx("設定");
@@ -27,7 +27,7 @@ namespace STSConfigurator
         {
 
             tnRoot = new TreeNodeEx(new frmSettingBase("設定", true));
-            TreeNodeEx tn1 = new TreeNodeEx(new frmSettingDatabase(this, CONFIG_DB_NAME, false));
+            TreeNodeEx tn1 = new TreeNodeEx(new frmSettingDatabase(this, CONFIG_DB_NAME));
             tnRoot.Nodes.Add(tn1);
             TreeNodeEx tn2 = new TreeNodeEx(new frmSettingBase("院内共通設定", true));
             tnRoot.Nodes.Add(tn2);
