@@ -15,10 +15,9 @@ namespace STSConfigurator
 {
     public partial class frmSettingBase : Form
     {
-        public event Action<Form> SaveSQL;
         public frmSettingsMain ownerForm;
         public bool HeadingForm { get; set; }
-        public bool SaveToSQL { get; set; }
+        public bool SaveModeXML { get; set; }
         public virtual CLSSaveData ClassSaveData { get { return null; } }
         private bool modified = false;
         public bool FormModified
@@ -78,31 +77,26 @@ namespace STSConfigurator
             else return null;
         }
         #endregion
+        public virtual void SaveToDatabase() { }
         public void SaveToXmlFile(frmSettingBase frmsettingbase)
         {
             frmSettingBase.CLSSaveData csd = frmsettingbase.ClassSaveData;
-            if (frmsettingbase.SaveToSQL)
+            var xmlserializer = new XmlSerializer(csd.GetType());
+            using (TextWriter tw = new StreamWriter(frmSettingBase.GetFilename(frmsettingbase.Title)))
             {
-                SaveSQL?.Invoke(this);
-            }
-            else
-            {
-                var xmlserializer = new XmlSerializer(csd.GetType());
-                using (TextWriter tw = new StreamWriter(frmSettingBase.GetFilename(frmsettingbase.Title)))
+                try
                 {
-                    try
-                    {
-                        xmlserializer.Serialize(tw, csd);
-                        tw.Flush();
-                    }
-                    catch (Exception ee)
-                    {
-                        Console.WriteLine(ee.Message);
-                        throw;
-                    }
+                    xmlserializer.Serialize(tw, csd);
+                    tw.Flush();
+                }
+                catch (Exception ee)
+                {
+                    Console.WriteLine(ee.Message);
+                    throw;
                 }
             }
         }
+        
         public virtual void AcceptData() { }
         [Serializable()]
         public class CLSSaveData

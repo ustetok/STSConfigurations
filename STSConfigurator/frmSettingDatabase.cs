@@ -25,7 +25,7 @@ namespace STSConfigurator
         {
             get
             {
-                frmSettingDatabase obj = (frmSettingDatabase)LoadFromXmlFile(typeof(CLSSaveDataDatabase), "● データベース接続および初期設定");
+                CLSSaveDataDatabase obj = (CLSSaveDataDatabase)LoadFromXmlFile(typeof(CLSSaveDataDatabase), "● データベース接続および初期設定");
                 if (obj == null) return "";
                 return "Data Source=" + obj.ServerName + ";Initial Catalog=" + obj.DatabaseName + ";Integrated Security=SSPI";
             }
@@ -36,7 +36,7 @@ namespace STSConfigurator
         {
             InitializeComponent();
             saveDataDatabase = new CLSSaveDataDatabase();
-            SaveToSQL = false;
+            SaveModeXML = true;
         }
         public frmSettingDatabase(frmSettingsMain ownerForm, string formTitle) : this()
         {

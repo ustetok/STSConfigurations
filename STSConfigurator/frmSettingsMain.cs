@@ -164,16 +164,11 @@ namespace STSConfigurator
         {
             formTarget.AcceptData();
             formTarget.SetOrigin();
-            formTarget.SaveToXmlFile(formTarget);
+            if (formTarget.SaveModeXML)
+                formTarget.SaveToXmlFile(formTarget);
+            else
+                formTarget.SaveToDatabase();
             formTarget.FormModified = false;
-            //if(pnl.Controls.Count>0)
-            //{
-            //    var fsb = pnl.Controls.OfType<frmSettingBase>().First<frmSettingBase>();
-            //    fsb.AcceptData();
-            //    fsb.SetOrigin();
-            //    fsb.SaveToXmlFile(fsb);
-            //    fsb.FormModified = false;
-            //}
         }
         private void pnl_SizeChanged(object sender, EventArgs e)
         {

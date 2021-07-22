@@ -13,6 +13,7 @@ namespace STSConfigurator
     public partial class frmSettingClinic : frmSettingBase
     {
         private CLSSaveDataClinic classSaveDataClinic;
+
         public override CLSSaveData ClassSaveData { get { return classSaveDataClinic; } }
         private string ConnectingString { get { return frmSettingDatabase.ConnectingString; } }
         private string ClinicName { get; set; }
@@ -28,9 +29,9 @@ namespace STSConfigurator
             InitializeComponent();
             classSaveDataClinic = new CLSSaveDataClinic();
             HeadingForm = false;
-            SaveToSQL = true;
+            SaveModeXML = false;
         }
-        public frmSettingClinic(frmSettingsMain ownerForm, string title):this()
+        public frmSettingClinic(frmSettingsMain ownerForm, string title) : this()
         {
             SetOwnerForm(ownerForm);
             Title = title;
@@ -38,27 +39,29 @@ namespace STSConfigurator
 
         private void frmSettingClinic_Load(object sender, EventArgs e)
         {
-            object sett = LoadFromXmlFile(typeof(CLSSaveDataClinic), lblTitle.Text);
-            if (sett != null)
-            {
-                ClinicName = ((CLSSaveDataClinic)sett).ClinicName;
-                NameEnglish = ((CLSSaveDataClinic)sett).NameEnglish;
-                Tel = ((CLSSaveDataClinic)sett).Tel;
-                Fax = ((CLSSaveDataClinic)sett).Fax;
-                EMail = ((CLSSaveDataClinic)sett).EMail;
-                PostalCode = ((CLSSaveDataClinic)sett).PostalCode;
-                Address = ((CLSSaveDataClinic)sett).Address;
+            LoadFromDatabase();
 
-                tbxClinicName.Text = ClinicName;
-                tbxClinicNameEnglish.Text = NameEnglish;
-                tbxTel.Text = Tel;
-                tbxFax.Text = Fax;
-                tbxEmail.Text = EMail;
-                tbxPostalCode.Text = PostalCode;
-                tbxAddress.Text = Address;
+            //object sett = LoadFromXmlFile(typeof(CLSSaveDataClinic), lblTitle.Text);
+            //if (sett != null)
+            //{
+            //    ClinicName = ((CLSSaveDataClinic)sett).ClinicName;
+            //    NameEnglish = ((CLSSaveDataClinic)sett).NameEnglish;
+            //    Tel = ((CLSSaveDataClinic)sett).Tel;
+            //    Fax = ((CLSSaveDataClinic)sett).Fax;
+            //    EMail = ((CLSSaveDataClinic)sett).EMail;
+            //    PostalCode = ((CLSSaveDataClinic)sett).PostalCode;
+            //    Address = ((CLSSaveDataClinic)sett).Address;
 
-                SetOrigin();
-            }
+            //    tbxClinicName.Text = ClinicName;
+            //    tbxClinicNameEnglish.Text = NameEnglish;
+            //    tbxTel.Text = Tel;
+            //    tbxFax.Text = Fax;
+            //    tbxEmail.Text = EMail;
+            //    tbxPostalCode.Text = PostalCode;
+            //    tbxAddress.Text = Address;
+
+            //    SetOrigin();
+            //}
 
         }
         public override void SetOrigin()
@@ -98,9 +101,85 @@ namespace STSConfigurator
         {
             ((frmSettingsMain)ownerForm).btnConfirm.Enabled = tbxClinicName.isValidated;
         }
-        
-    }
+        private void LoadFromDatabase()
+        {
+            using (var conn = new SqlConnection(ConnectingString))
+            {
+                var cmd = conn.CreateCommand();
+                cmd.CommandText = "SELECT * FROM T_Configuration";
+                try
+                {
+                    conn.Open();
+                    using (var sdr = cmd.ExecuteReader())
+                    {
+                        if (sdr.HasRows)    //一回だけ読む（複数登録を認めていない）
+                        {
+                            sdr.Read();
 
+                            ClinicName = sdr["ClinicName"].ToString(); tbxClinicName.Text = ClinicName;
+                            NameEnglish = sdr["ClinicNameEnglish"].ToString(); tbxClinicNameEnglish.Text = NameEnglish;
+                            Tel = sdr["ClinicTel"].ToString(); tbxTel.Text = Tel;
+                            Fax = sdr["ClinicFax"].ToString(); tbxFax.Text = Fax;
+                            EMail = sdr["ClinicEMailAddress"].ToString(); tbxEmail.Text = EMail;
+                            PostalCode = sdr["ClinicPostalCode"].ToString(); tbxPostalCode.Text = PostalCode;
+                            Address = sdr["ClinicAddress"].ToString(); tbxAddress.Text = Address;
+
+                            SetOrigin();
+                        }
+                    }
+                }
+                catch (Exception error)
+                {
+                    MessageBox.Show(error.ToString(), "データベースが開けません");
+                    throw;
+                }
+            }
+        }
+        public override void SaveToDatabase()
+        {
+            bool isNew;
+            using(var conn = new SqlConnection(ConnectingString))
+            {
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT * FROM T_Configuration";
+                    try
+                    {
+                        conn.Open();
+                        using (var sdr = cmd.ExecuteReader())
+                        {
+                            isNew = !sdr.HasRows;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "データベースが読み込めません");
+                        throw;
+                    }
+                }
+                using (var cmd = conn.CreateCommand())
+                {
+                    try
+                    {
+                        if (isNew)
+                        {
+                            cmd.CommandText = @"INSERT INTO T_Configuration (ClinicName, ClinicNameEnglish, ClinicTel, ClinicFax,ClinicEMailAddress,ClinicPostalCode,ClinicAddress) VALUES ('" + ClinicName + "','" + NameEnglish + "','" + Tel + "','" + Fax + "','" + EMail + "','" + PostalCode + "','" + Address + "')";
+                        }
+                        else
+                        {
+                            cmd.CommandText = @"UPDATE T_Configuration SET ClinicName = ''+'" + ClinicName + "' , ClinicNameEnglish = '" + NameEnglish + "' , ClinicTel = '" + Tel + "' , ClinicFax ='" + Fax + "' , ClinicEMailAddress = '" + EMail + "' , ClinicPostalCode = '" + PostalCode + "' , ClinicAddress = '" + Address + "'";
+                        }
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception exception)
+                    {
+                        MessageBox.Show(exception.ToString(), "データベースへの書き込みに失敗しました");
+                        throw;
+                    }
+                }
+            }
+        }
+    }
 
 
     [Serializable()]
