@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Linq;
+using WindowsFormControlsLibrary;
 
 namespace STSConfigurator
 {
@@ -40,29 +42,15 @@ namespace STSConfigurator
         private void frmSettingClinic_Load(object sender, EventArgs e)
         {
             LoadFromDatabase();
-
-            //object sett = LoadFromXmlFile(typeof(CLSSaveDataClinic), lblTitle.Text);
-            //if (sett != null)
-            //{
-            //    ClinicName = ((CLSSaveDataClinic)sett).ClinicName;
-            //    NameEnglish = ((CLSSaveDataClinic)sett).NameEnglish;
-            //    Tel = ((CLSSaveDataClinic)sett).Tel;
-            //    Fax = ((CLSSaveDataClinic)sett).Fax;
-            //    EMail = ((CLSSaveDataClinic)sett).EMail;
-            //    PostalCode = ((CLSSaveDataClinic)sett).PostalCode;
-            //    Address = ((CLSSaveDataClinic)sett).Address;
-
-            //    tbxClinicName.Text = ClinicName;
-            //    tbxClinicNameEnglish.Text = NameEnglish;
-            //    tbxTel.Text = Tel;
-            //    tbxFax.Text = Fax;
-            //    tbxEmail.Text = EMail;
-            //    tbxPostalCode.Text = PostalCode;
-            //    tbxAddress.Text = Address;
-
-            //    SetOrigin();
-            //}
-
+        }
+        private void frmSettingClinic_Shown(object sender, EventArgs e)
+        {
+            SetOrigin();
+            foreach(var cnt in Controls.OfType<TextBoxFWValidation>())
+            {
+                cnt.isModified = false;
+                cnt.TextChanged += DatasChanged;
+            }
         }
         public override void SetOrigin()
         {
@@ -83,7 +71,6 @@ namespace STSConfigurator
             tbxEmail.Text = tbxEmail.Originalstring;
             tbxPostalCode.Text = tbxPostalCode.Originalstring;
             tbxAddress.Text = tbxAddress.Originalstring;
-
             this.FormModified = false;
         }
         public override void AcceptData()
@@ -99,7 +86,7 @@ namespace STSConfigurator
 
         private void DatasChanged(object sender, EventArgs e)
         {
-            ((frmSettingsMain)ownerForm).btnConfirm.Enabled = tbxClinicName.isValidated;
+            FormModified = Controls.OfType<TextBoxFWValidation>().Any(n => n.isModified);
         }
         private void LoadFromDatabase()
         {
@@ -123,8 +110,6 @@ namespace STSConfigurator
                             EMail = sdr["ClinicEMailAddress"].ToString(); tbxEmail.Text = EMail;
                             PostalCode = sdr["ClinicPostalCode"].ToString(); tbxPostalCode.Text = PostalCode;
                             Address = sdr["ClinicAddress"].ToString(); tbxAddress.Text = Address;
-
-                            SetOrigin();
                         }
                     }
                 }
@@ -179,6 +164,7 @@ namespace STSConfigurator
                 }
             }
         }
+
     }
 
 

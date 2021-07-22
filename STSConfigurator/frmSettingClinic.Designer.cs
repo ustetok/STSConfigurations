@@ -63,7 +63,6 @@ namespace STSConfigurator
             this.tbxClinicName.Originalstring = null;
             this.tbxClinicName.Size = new System.Drawing.Size(730, 25);
             this.tbxClinicName.TabIndex = 2;
-            this.tbxClinicName.TextChanged += new System.EventHandler(this.DatasChanged);
             // 
             // tbxClinicNameEnglish
             // 
@@ -233,6 +232,7 @@ namespace STSConfigurator
             this.Name = "frmSettingClinic";
             this.Title = "医院情報";
             this.Load += new System.EventHandler(this.frmSettingClinic_Load);
+            this.Shown += new System.EventHandler(this.frmSettingClinic_Shown);
             this.Controls.SetChildIndex(this.lblTitle, 0);
             this.Controls.SetChildIndex(this.tbxClinicName, 0);
             this.Controls.SetChildIndex(this.tbxClinicNameEnglish, 0);

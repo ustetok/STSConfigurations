@@ -121,8 +121,6 @@ namespace STSConfigurator
         {
             FormModified = cbxMServer.Modified || cbxMDatabase.Modified;
             btnDBTestEnable();
-
-            ((frmSettingsMain)ownerForm).btnConfirm.Enabled = cbxMServer.Text.Length > 0 && cbxMDatabase.Text.Length > 0 ;
         }
         private void btnDBTestEnable()
         {
