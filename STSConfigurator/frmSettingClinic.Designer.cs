@@ -43,6 +43,7 @@ namespace STSConfigurator
             this.label7 = new System.Windows.Forms.Label();
             this.tbxAddress = new WindowsFormControlsLibrary.TextBoxFWValidation();
             this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblTitle
@@ -58,7 +59,7 @@ namespace STSConfigurator
             this.tbxClinicName.ImeMode = System.Windows.Forms.ImeMode.Hiragana;
             this.tbxClinicName.isModified = false;
             this.tbxClinicName.isValidated = false;
-            this.tbxClinicName.Location = new System.Drawing.Point(114, 42);
+            this.tbxClinicName.Location = new System.Drawing.Point(114, 72);
             this.tbxClinicName.Name = "tbxClinicName";
             this.tbxClinicName.Originalstring = null;
             this.tbxClinicName.Size = new System.Drawing.Size(730, 25);
@@ -72,7 +73,7 @@ namespace STSConfigurator
             this.tbxClinicNameEnglish.Enable = true;
             this.tbxClinicNameEnglish.isModified = false;
             this.tbxClinicNameEnglish.isValidated = false;
-            this.tbxClinicNameEnglish.Location = new System.Drawing.Point(114, 86);
+            this.tbxClinicNameEnglish.Location = new System.Drawing.Point(114, 116);
             this.tbxClinicNameEnglish.Name = "tbxClinicNameEnglish";
             this.tbxClinicNameEnglish.Originalstring = null;
             this.tbxClinicNameEnglish.Size = new System.Drawing.Size(730, 25);
@@ -85,7 +86,7 @@ namespace STSConfigurator
             this.tbxTel.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.tbxTel.isModified = false;
             this.tbxTel.isValidated = false;
-            this.tbxTel.Location = new System.Drawing.Point(114, 130);
+            this.tbxTel.Location = new System.Drawing.Point(114, 160);
             this.tbxTel.Name = "tbxTel";
             this.tbxTel.NumericMode = true;
             this.tbxTel.Originalstring = null;
@@ -99,7 +100,7 @@ namespace STSConfigurator
             this.tbxFax.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.tbxFax.isModified = false;
             this.tbxFax.isValidated = false;
-            this.tbxFax.Location = new System.Drawing.Point(114, 174);
+            this.tbxFax.Location = new System.Drawing.Point(114, 204);
             this.tbxFax.Name = "tbxFax";
             this.tbxFax.Originalstring = null;
             this.tbxFax.Size = new System.Drawing.Size(203, 25);
@@ -114,7 +115,7 @@ namespace STSConfigurator
             this.tbxEmail.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.tbxEmail.isModified = false;
             this.tbxEmail.isValidated = false;
-            this.tbxEmail.Location = new System.Drawing.Point(114, 218);
+            this.tbxEmail.Location = new System.Drawing.Point(114, 248);
             this.tbxEmail.Name = "tbxEmail";
             this.tbxEmail.Originalstring = null;
             this.tbxEmail.Size = new System.Drawing.Size(730, 25);
@@ -123,7 +124,7 @@ namespace STSConfigurator
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 45);
+            this.label2.Location = new System.Drawing.Point(13, 75);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(55, 18);
             this.label2.TabIndex = 7;
@@ -132,7 +133,7 @@ namespace STSConfigurator
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(13, 89);
+            this.label3.Location = new System.Drawing.Point(13, 119);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(78, 18);
             this.label3.TabIndex = 8;
@@ -141,7 +142,7 @@ namespace STSConfigurator
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(13, 133);
+            this.label4.Location = new System.Drawing.Point(13, 163);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(56, 18);
             this.label4.TabIndex = 9;
@@ -150,7 +151,7 @@ namespace STSConfigurator
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(13, 177);
+            this.label5.Location = new System.Drawing.Point(13, 207);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(53, 18);
             this.label5.TabIndex = 10;
@@ -159,7 +160,7 @@ namespace STSConfigurator
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(13, 221);
+            this.label6.Location = new System.Drawing.Point(13, 251);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(91, 18);
             this.label6.TabIndex = 11;
@@ -172,7 +173,7 @@ namespace STSConfigurator
             this.tbxPostalCode.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.tbxPostalCode.isModified = false;
             this.tbxPostalCode.isValidated = false;
-            this.tbxPostalCode.Location = new System.Drawing.Point(114, 262);
+            this.tbxPostalCode.Location = new System.Drawing.Point(114, 292);
             this.tbxPostalCode.Name = "tbxPostalCode";
             this.tbxPostalCode.NumericMode = true;
             this.tbxPostalCode.Originalstring = null;
@@ -182,7 +183,7 @@ namespace STSConfigurator
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(13, 265);
+            this.label7.Location = new System.Drawing.Point(13, 295);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(56, 18);
             this.label7.TabIndex = 13;
@@ -196,7 +197,7 @@ namespace STSConfigurator
             this.tbxAddress.Enable = true;
             this.tbxAddress.isModified = false;
             this.tbxAddress.isValidated = false;
-            this.tbxAddress.Location = new System.Drawing.Point(115, 306);
+            this.tbxAddress.Location = new System.Drawing.Point(115, 336);
             this.tbxAddress.Name = "tbxAddress";
             this.tbxAddress.Originalstring = null;
             this.tbxAddress.Size = new System.Drawing.Size(729, 25);
@@ -205,16 +206,26 @@ namespace STSConfigurator
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(13, 309);
+            this.label8.Location = new System.Drawing.Point(13, 339);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(44, 18);
             this.label8.TabIndex = 15;
             this.label8.Text = "所在地";
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(16, 40);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(212, 18);
+            this.label9.TabIndex = 16;
+            this.label9.Text = "データはデータベースに保存されます";
+            // 
             // frmSettingClinic
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 18F);
             this.ClientSize = new System.Drawing.Size(856, 606);
+            this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.tbxAddress);
             this.Controls.Add(this.label7);
@@ -248,6 +259,7 @@ namespace STSConfigurator
             this.Controls.SetChildIndex(this.label7, 0);
             this.Controls.SetChildIndex(this.tbxAddress, 0);
             this.Controls.SetChildIndex(this.label8, 0);
+            this.Controls.SetChildIndex(this.label9, 0);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -269,5 +281,6 @@ namespace STSConfigurator
         private System.Windows.Forms.Label label7;
         private WindowsFormControlsLibrary.TextBoxFWValidation tbxAddress;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
     }
 }

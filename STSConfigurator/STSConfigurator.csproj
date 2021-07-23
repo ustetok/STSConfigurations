@@ -70,6 +70,12 @@
     <Compile Include="frmSettingDatabase.Designer.cs">
       <DependentUpon>frmSettingDatabase.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmSettingPhoto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSettingPhoto.Designer.cs">
+      <DependentUpon>frmSettingPhoto.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmSettingsMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -90,6 +96,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmSettingDatabase.resx">
       <DependentUpon>frmSettingDatabase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSettingPhoto.resx">
+      <DependentUpon>frmSettingPhoto.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmSettingsMain.resx">
       <DependentUpon>frmSettingsMain.cs</DependentUpon>

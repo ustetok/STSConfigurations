@@ -80,6 +80,9 @@ namespace STSConfigurator
         }
         public static object LoadFromDatabase(object csd)
         {
+            Cursor c = Cursor.Current;
+            Cursor.Current = Cursors.WaitCursor;
+
             Type type = csd.GetType();
             var fieldInfo = type.GetFields();
 
@@ -109,8 +112,11 @@ namespace STSConfigurator
                     MessageBox.Show(error.ToString(), "データベースが開けません");
                     throw;
                 }
+                finally
+                {
+                    Cursor.Current = c;
+                }
             }
-
         }
         #endregion
         public virtual void SaveToDatabase()

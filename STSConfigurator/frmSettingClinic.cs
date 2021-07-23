@@ -15,8 +15,14 @@ namespace STSConfigurator
     public partial class frmSettingClinic : frmSettingBase
     {
         private CLSSaveDataClinic classSaveDataClinic;
-
         public override CLSSaveData ClassSaveData { get { return classSaveDataClinic; } }
+        public static CLSSaveDataClinic ClassSaveDataClinic
+        {
+            get
+            {
+                return LoadFromDatabase(new CLSSaveDataClinic()) as CLSSaveDataClinic;
+            }
+        }
         private string ClinicName { get; set; }
         private string NameEnglish { get; set; }
         private string Tel { get; set; }
@@ -50,35 +56,23 @@ namespace STSConfigurator
             tbxPostalCode.Text = classSaveDataClinic.ClinicPostalCode;
             tbxAddress.Text = classSaveDataClinic.ClinicAddress;
         }
-        
         private void frmSettingClinic_Shown(object sender, EventArgs e)
         {
             SetOrigin();
-            foreach(var cnt in Controls.OfType<TextBoxFWValidation>())
+            this.Controls.OfType<TextBoxFWValidation>().ToList().ForEach(tbx =>
             {
-                cnt.isModified = false;
-                cnt.TextChanged += DatasChanged;
+                tbx.isModified = false;
+                tbx.TextChanged += DatasChanged;
             }
+            );
         }
         public override void SetOrigin()
         {
-            tbxClinicName.Originalstring = tbxClinicName.Text;
-            tbxClinicNameEnglish.Originalstring = tbxClinicNameEnglish.Text;
-            tbxTel.Originalstring = tbxTel.Text;
-            tbxFax.Originalstring = tbxFax.Text;
-            tbxEmail.Originalstring = tbxEmail.Text;
-            tbxPostalCode.Originalstring = tbxPostalCode.Text;
-            tbxAddress.Originalstring = tbxAddress.Text;
+            this.Controls.OfType<TextBoxFWValidation>().ToList().ForEach(tbx => tbx.Originalstring = tbx.Text);
         }
         public override void ResumeToOrigin()
         {
-            tbxClinicName.Text = tbxClinicName.Originalstring;
-            tbxClinicNameEnglish.Text = tbxClinicNameEnglish.Originalstring;
-            tbxTel.Text = tbxTel.Originalstring;
-            tbxFax.Text = tbxFax.Originalstring;
-            tbxEmail.Text = tbxEmail.Originalstring;
-            tbxPostalCode.Text = tbxPostalCode.Originalstring;
-            tbxAddress.Text = tbxAddress.Originalstring;
+            this.Controls.OfType<TextBoxFWValidation>().ToList().ForEach(tbx => tbx.Text = tbx.Originalstring);
             this.FormModified = false;
         }
         public override void AcceptData()
@@ -91,7 +85,6 @@ namespace STSConfigurator
             PostalCode = classSaveDataClinic.ClinicPostalCode = tbxPostalCode.Text;
             Address = classSaveDataClinic.ClinicAddress = tbxAddress.Text;
         }
-
         private void DatasChanged(object sender, EventArgs e)
         {
             FormModified = Controls.OfType<TextBoxFWValidation>().Any(n => n.isModified);
@@ -140,7 +133,6 @@ namespace STSConfigurator
                 }
             }
         }
-
     }
 
 

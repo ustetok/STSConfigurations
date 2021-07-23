@@ -12,12 +12,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using WindowsFormControlsLibrary;
 
 namespace STSConfigurator
 {
     public partial class frmSettingDatabase : frmSettingBase
     {
-        public CLSSaveDataDatabase saveDataDatabase;
+        private CLSSaveDataDatabase saveDataDatabase;
         public override CLSSaveData ClassSaveData { get { return saveDataDatabase; } }
         public string ServerName { get; set; }
         public string DatabaseName { get; set; }
@@ -63,13 +64,11 @@ namespace STSConfigurator
         }
         public override void SetOrigin()
         {
-            cbxMServer.Original = cbxMServer.Text;
-            cbxMDatabase.Original = cbxMDatabase.Text;
+            this.Controls.OfType<ComboBoxModified>().ToList().ForEach(cbx => cbx.Original = cbx.Text);
         }
         public override void ResumeToOrigin()
         {
-            cbxMServer.Text = cbxMServer.Original;
-            cbxMDatabase.Text = cbxMDatabase.Original;
+            this.Controls.OfType<ComboBoxModified>().ToList().ForEach(cbx => cbx.Text = cbx.Original);
             this.FormModified = false;
         }
         private void cbxServer_DropDown(object sender, EventArgs e)

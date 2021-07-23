@@ -27,12 +27,16 @@ namespace STSConfigurator
         {
 
             tnRoot = new TreeNodeEx(new frmSettingBase("設定", true));
-            TreeNodeEx tn1 = new TreeNodeEx(new frmSettingDatabase(this, CONFIG_DB_NAME));
-            tnRoot.Nodes.Add(tn1);
+                TreeNodeEx tn1 = new TreeNodeEx(new frmSettingDatabase(this, CONFIG_DB_NAME));
+                tnRoot.Nodes.Add(tn1);
             TreeNodeEx tn2 = new TreeNodeEx(new frmSettingBase("院内共通設定", true));
             tnRoot.Nodes.Add(tn2);
-            TreeNodeEx tn21 = new TreeNodeEx(new frmSettingClinic(this, "● 医院情報"));
-            tn2.Nodes.Add(tn21);
+                TreeNodeEx tn21 = new TreeNodeEx(new frmSettingClinic(this, "● 医院情報"));
+                tn2.Nodes.Add(tn21);
+                TreeNodeEx tn22 = new TreeNodeEx(new frmSettingPhoto(this, "● 写真及びレントゲンの設定"));
+                tn2.Nodes.Add(tn22);
+            TreeNodeEx tn3 = new TreeNodeEx(new frmSettingBase("各デバイスごとの設定", true));
+            tnRoot.Nodes.Add(tn3);
             //TreeNodeEx tn0 = new TreeNodeEx(new frmSettingDatabase(this));
             //tnRoot.Nodes.Add(tn0);
             //TreeNodeEx tn1 = new TreeNodeEx("共通設定");
