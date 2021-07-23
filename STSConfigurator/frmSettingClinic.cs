@@ -40,8 +40,17 @@ namespace STSConfigurator
 
         private void frmSettingClinic_Load(object sender, EventArgs e)
         {
-            LoadFromDatabase();
+            classSaveDataClinic = LoadFromDatabase(classSaveDataClinic) as CLSSaveDataClinic;
+
+            tbxClinicName.Text = classSaveDataClinic.ClinicName;
+            tbxClinicNameEnglish.Text = classSaveDataClinic.ClinicNameEnglish;
+            tbxTel.Text = classSaveDataClinic.ClinicTel;
+            tbxFax.Text = classSaveDataClinic.ClinicFax;
+            tbxEmail.Text = classSaveDataClinic.ClinicEMailAddress;
+            tbxPostalCode.Text = classSaveDataClinic.ClinicPostalCode;
+            tbxAddress.Text = classSaveDataClinic.ClinicAddress;
         }
+        
         private void frmSettingClinic_Shown(object sender, EventArgs e)
         {
             SetOrigin();
@@ -75,49 +84,17 @@ namespace STSConfigurator
         public override void AcceptData()
         {
             ClinicName = classSaveDataClinic.ClinicName = tbxClinicName.Text;
-            NameEnglish = classSaveDataClinic.NameEnglish = tbxClinicNameEnglish.Text;
-            Tel = classSaveDataClinic.Tel = tbxTel.Text;
-            Fax = classSaveDataClinic.Fax = tbxFax.Text;
-            EMail = classSaveDataClinic.EMail = tbxEmail.Text;
-            PostalCode = classSaveDataClinic.PostalCode = tbxPostalCode.Text;
-            Address = classSaveDataClinic.Address = tbxAddress.Text;
+            NameEnglish = classSaveDataClinic.ClinicNameEnglish = tbxClinicNameEnglish.Text;
+            Tel = classSaveDataClinic.ClinicTel = tbxTel.Text;
+            Fax = classSaveDataClinic.ClinicFax = tbxFax.Text;
+            EMail = classSaveDataClinic.ClinicEMailAddress = tbxEmail.Text;
+            PostalCode = classSaveDataClinic.ClinicPostalCode = tbxPostalCode.Text;
+            Address = classSaveDataClinic.ClinicAddress = tbxAddress.Text;
         }
 
         private void DatasChanged(object sender, EventArgs e)
         {
             FormModified = Controls.OfType<TextBoxFWValidation>().Any(n => n.isModified);
-        }
-        private void LoadFromDatabase()
-        {
-            using (var conn = new SqlConnection(frmSettingDatabase.ConnectingString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandText = "SELECT * FROM T_Configuration";
-                try
-                {
-                    conn.Open();
-                    using (var sdr = cmd.ExecuteReader())
-                    {
-                        if (sdr.HasRows)    //一回だけ読む（複数登録を認めていない）
-                        {
-                            sdr.Read();
-
-                            ClinicName = sdr["ClinicName"].ToString(); tbxClinicName.Text = ClinicName;
-                            NameEnglish = sdr["ClinicNameEnglish"].ToString(); tbxClinicNameEnglish.Text = NameEnglish;
-                            Tel = sdr["ClinicTel"].ToString(); tbxTel.Text = Tel;
-                            Fax = sdr["ClinicFax"].ToString(); tbxFax.Text = Fax;
-                            EMail = sdr["ClinicEMailAddress"].ToString(); tbxEmail.Text = EMail;
-                            PostalCode = sdr["ClinicPostalCode"].ToString(); tbxPostalCode.Text = PostalCode;
-                            Address = sdr["ClinicAddress"].ToString(); tbxAddress.Text = Address;
-                        }
-                    }
-                }
-                catch (Exception error)
-                {
-                    MessageBox.Show(error.ToString(), "データベースが開けません");
-                    throw;
-                }
-            }
         }
         public override void SaveToDatabase()
         {
@@ -171,12 +148,12 @@ namespace STSConfigurator
     public class CLSSaveDataClinic : frmSettingBase.CLSSaveData
     {
         public string ClinicName;
-        public string NameEnglish;
-        public string Tel;
-        public string Fax;
-        public string EMail;
-        public string PostalCode;
-        public string Address;
+        public string ClinicNameEnglish;
+        public string ClinicTel;
+        public string ClinicFax;
+        public string ClinicEMailAddress;
+        public string ClinicPostalCode;
+        public string ClinicAddress;
         public CLSSaveDataClinic() { }
 
     }

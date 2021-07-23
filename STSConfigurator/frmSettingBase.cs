@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using System.Reflection;
 
 namespace STSConfigurator
 {
@@ -76,8 +78,45 @@ namespace STSConfigurator
             }
             else return null;
         }
+        public static object LoadFromDatabase(object csd)
+        {
+            Type type = csd.GetType();
+            var fieldInfo = type.GetFields();
+
+            using (var conn = new SqlConnection(frmSettingDatabase.ConnectingString))
+            {
+                var cmd = conn.CreateCommand();
+                cmd.CommandText = "SELECT * FROM T_Configuration";  //  ほかの設定で使うとき条件分岐させること
+                try
+                {
+                    conn.Open();
+                    using (var sdr = cmd.ExecuteReader())
+                    {
+                        if (sdr.HasRows)    //一回だけ読む（複数登録を認めていない）
+                        {
+                            sdr.Read();
+
+                            for(int i = 0;i<fieldInfo.Length;i++)
+                            {
+                                fieldInfo[i].SetValue(csd, sdr[fieldInfo[i].Name] );
+                            }
+                        }
+                    }
+                    return csd;
+                }
+                catch (Exception error)
+                {
+                    MessageBox.Show(error.ToString(), "データベースが開けません");
+                    throw;
+                }
+            }
+
+        }
         #endregion
-        public virtual void SaveToDatabase() { }
+        public virtual void SaveToDatabase()
+        {
+
+        }
         public void SaveToXmlFile(frmSettingBase frmsettingbase)
         {
             frmSettingBase.CLSSaveData csd = frmsettingbase.ClassSaveData;
