@@ -17,7 +17,6 @@ namespace STSConfigurator
         private CLSSaveDataClinic classSaveDataClinic;
 
         public override CLSSaveData ClassSaveData { get { return classSaveDataClinic; } }
-        private string ConnectingString { get { return frmSettingDatabase.ConnectingString; } }
         private string ClinicName { get; set; }
         private string NameEnglish { get; set; }
         private string Tel { get; set; }
@@ -90,7 +89,7 @@ namespace STSConfigurator
         }
         private void LoadFromDatabase()
         {
-            using (var conn = new SqlConnection(ConnectingString))
+            using (var conn = new SqlConnection(frmSettingDatabase.ConnectingString))
             {
                 var cmd = conn.CreateCommand();
                 cmd.CommandText = "SELECT * FROM T_Configuration";
@@ -123,7 +122,7 @@ namespace STSConfigurator
         public override void SaveToDatabase()
         {
             bool isNew;
-            using(var conn = new SqlConnection(ConnectingString))
+            using(var conn = new SqlConnection(frmSettingDatabase.ConnectingString))
             {
                 using (var cmd = conn.CreateCommand())
                 {
