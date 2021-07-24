@@ -48,7 +48,7 @@ namespace STSConfigurator
             this.cbxMServer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cbxMServer.FormattingEnabled = true;
-            this.cbxMServer.Location = new System.Drawing.Point(6, 96);
+            this.cbxMServer.Location = new System.Drawing.Point(6, 73);
             this.cbxMServer.Name = "cbxMServer";
             this.cbxMServer.Original = null;
             this.cbxMServer.Size = new System.Drawing.Size(817, 26);
@@ -60,7 +60,7 @@ namespace STSConfigurator
             this.cbxMDatabase.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cbxMDatabase.FormattingEnabled = true;
-            this.cbxMDatabase.Location = new System.Drawing.Point(6, 162);
+            this.cbxMDatabase.Location = new System.Drawing.Point(6, 139);
             this.cbxMDatabase.Name = "cbxMDatabase";
             this.cbxMDatabase.Original = null;
             this.cbxMDatabase.Size = new System.Drawing.Size(817, 26);
@@ -70,7 +70,7 @@ namespace STSConfigurator
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 75);
+            this.label2.Location = new System.Drawing.Point(9, 52);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(75, 18);
             this.label2.TabIndex = 6;
@@ -79,7 +79,7 @@ namespace STSConfigurator
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(9, 141);
+            this.label3.Location = new System.Drawing.Point(9, 118);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(99, 18);
             this.label3.TabIndex = 7;
@@ -87,9 +87,10 @@ namespace STSConfigurator
             // 
             // label4
             // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label4.Location = new System.Drawing.Point(16, 40);
+            this.label4.Location = new System.Drawing.Point(532, 38);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(284, 18);
             this.label4.TabIndex = 8;
@@ -98,7 +99,7 @@ namespace STSConfigurator
             // btnDBTest
             // 
             this.btnDBTest.Enabled = false;
-            this.btnDBTest.Location = new System.Drawing.Point(21, 217);
+            this.btnDBTest.Location = new System.Drawing.Point(21, 194);
             this.btnDBTest.Name = "btnDBTest";
             this.btnDBTest.Size = new System.Drawing.Size(244, 25);
             this.btnDBTest.TabIndex = 13;

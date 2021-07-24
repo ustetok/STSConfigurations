@@ -118,6 +118,7 @@ namespace STSConfigurator
         }
         private void DatasChanged(object sender, EventArgs e)
         {
+            IsValidated = Controls.OfType<ComboBoxModified>().All(cbx => cbx.Text.Length > 0);
             FormModified = cbxMServer.Modified || cbxMDatabase.Modified;
             btnDBTestEnable();
         }

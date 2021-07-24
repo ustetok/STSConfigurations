@@ -87,51 +87,8 @@ namespace STSConfigurator
         }
         private void DatasChanged(object sender, EventArgs e)
         {
+            IsValidated = tbxClinicName.isValidated;
             FormModified = Controls.OfType<TextBoxFWValidation>().Any(n => n.isModified);
-        }
-        public override void SaveToDatabase()
-        {
-            bool isNew;
-            using(var conn = new SqlConnection(frmSettingDatabase.ConnectingString))
-            {
-                using (var cmd = conn.CreateCommand())
-                {
-                    cmd.CommandText = @"SELECT * FROM T_Configuration";
-                    try
-                    {
-                        conn.Open();
-                        using (var sdr = cmd.ExecuteReader())
-                        {
-                            isNew = !sdr.HasRows;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message, "データベースが読み込めません");
-                        throw;
-                    }
-                }
-                using (var cmd = conn.CreateCommand())
-                {
-                    try
-                    {
-                        if (isNew)
-                        {
-                            cmd.CommandText = @"INSERT INTO T_Configuration (ClinicName, ClinicNameEnglish, ClinicTel, ClinicFax,ClinicEMailAddress,ClinicPostalCode,ClinicAddress) VALUES ('" + ClinicName + "','" + NameEnglish + "','" + Tel + "','" + Fax + "','" + EMail + "','" + PostalCode + "','" + Address + "')";
-                        }
-                        else
-                        {
-                            cmd.CommandText = @"UPDATE T_Configuration SET ClinicName = ''+'" + ClinicName + "' , ClinicNameEnglish = '" + NameEnglish + "' , ClinicTel = '" + Tel + "' , ClinicFax ='" + Fax + "' , ClinicEMailAddress = '" + EMail + "' , ClinicPostalCode = '" + PostalCode + "' , ClinicAddress = '" + Address + "'";
-                        }
-                        cmd.ExecuteNonQuery();
-                    }
-                    catch (Exception exception)
-                    {
-                        MessageBox.Show(exception.ToString(), "データベースへの書き込みに失敗しました");
-                        throw;
-                    }
-                }
-            }
         }
     }
 

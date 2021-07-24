@@ -90,7 +90,7 @@ namespace STSConfigurator
         }
         public void ModifiedChanged(string treeNodeName, bool isModified)
         {
-            btnConfirm.Enabled = isModified;
+            btnConfirm.Enabled = isModified && formTarget.IsValidated;
             btnReturnToOriginal.Enabled = isModified;
             FindTreeNode(treeNodeName).Bold = isModified;
         }
@@ -171,7 +171,7 @@ namespace STSConfigurator
             if (formTarget.SaveModeXML)
                 formTarget.SaveToXmlFile(formTarget);
             else
-                formTarget.SaveToDatabase();
+                formTarget.SaveToDatabase(formTarget.ClassSaveData);
             formTarget.FormModified = false;
         }
         private void pnl_SizeChanged(object sender, EventArgs e)

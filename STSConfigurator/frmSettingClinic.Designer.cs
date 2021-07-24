@@ -71,6 +71,7 @@ namespace STSConfigurator
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbxClinicNameEnglish.CueBannerText = "英語表記で入力してください";
             this.tbxClinicNameEnglish.Enable = true;
+            this.tbxClinicNameEnglish.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.tbxClinicNameEnglish.isModified = false;
             this.tbxClinicNameEnglish.isValidated = false;
             this.tbxClinicNameEnglish.Location = new System.Drawing.Point(114, 116);
@@ -195,6 +196,7 @@ namespace STSConfigurator
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbxAddress.CueBannerText = "医院の住所を入力してください";
             this.tbxAddress.Enable = true;
+            this.tbxAddress.ImeMode = System.Windows.Forms.ImeMode.Hiragana;
             this.tbxAddress.isModified = false;
             this.tbxAddress.isValidated = false;
             this.tbxAddress.Location = new System.Drawing.Point(115, 336);
@@ -214,8 +216,9 @@ namespace STSConfigurator
             // 
             // label9
             // 
+            this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(16, 40);
+            this.label9.Location = new System.Drawing.Point(632, 38);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(212, 18);
             this.label9.TabIndex = 16;

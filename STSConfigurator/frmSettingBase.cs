@@ -22,6 +22,7 @@ namespace STSConfigurator
         public bool SaveModeXML { get; set; }
         public virtual CLSSaveData ClassSaveData { get { return null; } }
         private bool modified = false;
+        public bool IsValidated { get; set; }
         public bool FormModified
         {
             get { return modified; }
@@ -32,7 +33,6 @@ namespace STSConfigurator
             }
         }
         public static string FilePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\STS3Settings\";
-        public frmSettingBase SettingForm { get; set; }
         public string Title
         {
             get { return lblTitle.Text; }
@@ -89,40 +89,107 @@ namespace STSConfigurator
             using (var conn = new SqlConnection(frmSettingDatabase.ConnectingString))
             {
                 var cmd = conn.CreateCommand();
-                cmd.CommandText = "SELECT * FROM T_Configuration";  //  ほかの設定で使うとき条件分岐させること
-                try
-                {
-                    conn.Open();
-                    using (var sdr = cmd.ExecuteReader())
+                if (type == typeof(CLSSaveDataClinic)) cmd.CommandText = "SELECT * FROM T_Configuration";
+                else cmd.CommandText = "SELECT * FROM T_ConfigurationPhoto";
+                    try
                     {
-                        if (sdr.HasRows)    //一回だけ読む（複数登録を認めていない）
+                        conn.Open();
+                        using (var sdr = cmd.ExecuteReader())
                         {
-                            sdr.Read();
-
-                            for(int i = 0;i<fieldInfo.Length;i++)
+                            if (sdr.HasRows)    //一回だけ読む（複数登録を認めていない）
                             {
-                                fieldInfo[i].SetValue(csd, sdr[fieldInfo[i].Name] );
+                                sdr.Read();
+
+                                for (int i = 0; i < fieldInfo.Length; i++)
+                                {
+                                    fieldInfo[i].SetValue(csd, sdr[fieldInfo[i].Name]);
+                                }
                             }
                         }
+                        return csd;
                     }
-                    return csd;
-                }
-                catch (Exception error)
-                {
-                    MessageBox.Show(error.ToString(), "データベースが開けません");
-                    throw;
-                }
-                finally
-                {
-                    Cursor.Current = c;
-                }
+                    catch (Exception error)
+                    {
+                        MessageBox.Show(error.ToString(), "データベースが開けません");
+                        throw;
+                    }
+                    finally
+                    {
+                        Cursor.Current = c;
+                    }
             }
         }
         #endregion
-        public virtual void SaveToDatabase()
+        public virtual void SaveToDatabase(CLSSaveData csd)
         {
+            bool isNew;
+            string tableName = "";
+            if (csd.GetType() == typeof(CLSSaveDataClinic)) tableName = "T_Configuration";
+            else tableName = "T_ConfigurationPhoto";                                        // 要条件分岐
 
+            using (var conn = new SqlConnection(frmSettingDatabase.ConnectingString))
+            {
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT * FROM " + tableName;
+
+                    try
+                    {
+                        conn.Open();
+                        using (var sdr = cmd.ExecuteReader())
+                        {
+                            isNew = !sdr.HasRows;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "データベースが読み込めません");
+                        throw;
+                    }
+                }
+                using (var cmd = conn.CreateCommand())
+                {
+                    Type type = csd.GetType();
+                    FieldInfo[] fields = type.GetFields();
+                    try
+                    {
+                        if (isNew)
+                        {
+                            cmd.CommandText = @"INSERT INTO " + tableName + " VALUES(";
+                            fields.ToList().ForEach(f => cmd.CommandText += "@" + f.Name + ",");
+                            cmd.CommandText = cmd.CommandText.TrimEnd(',') + ")";
+                            makeParameters();
+                        }
+                        else
+                        {
+                            cmd.CommandText = @"UPDATE " + tableName + @" SET ";
+                            fields.ToList().ForEach(f => cmd.CommandText += f.Name + " = @" + f.Name + ",");
+                            cmd.CommandText = cmd.CommandText.TrimEnd(',');
+                            makeParameters();
+                        }
+                        cmd.ExecuteNonQuery();
+
+                        void makeParameters()
+                        {
+                            foreach (var field in fields)
+                            {
+                                string s = "@" + field.Name;
+                                SqlParameter p = new SqlParameter(s, field.GetValue(csd));
+                                cmd.Parameters.Add(p);
+                            }
+                        }
+
+                    }
+                    catch (Exception exception)
+                    {
+                        MessageBox.Show(exception.ToString(), "データベースへの書き込みに失敗しました");
+                        throw;
+                    }
+                }
+            }
         }
+
+        
         public void SaveToXmlFile(frmSettingBase frmsettingbase)
         {
             frmSettingBase.CLSSaveData csd = frmsettingbase.ClassSaveData;
