@@ -209,11 +209,19 @@ namespace STSConfigurator
             }
         }
         
-        public virtual void AcceptData() { }
+        public virtual AcceptDataError AcceptData() { return null; }
         [Serializable()]
         public class CLSSaveData
         {
             public CLSSaveData() { }
+        }
+    }
+    public class AcceptDataError
+    {
+        public bool HasError { get; set; }
+        public AcceptDataError(bool hasError)
+        {
+            HasError = hasError;        //false　問題ない場合
         }
     }
 }

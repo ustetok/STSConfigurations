@@ -9,6 +9,7 @@ using System.Linq;
 using WindowsFormControlsLibrary;
 using System.Data.SqlClient;
 using System.Reflection;
+using System.IO;
 
 namespace STSConfigurator
 {
@@ -62,7 +63,7 @@ namespace STSConfigurator
             this.Controls.OfType<TextBoxFWValidation>().ToList().ForEach(tbx => tbx.Text = tbx.Originalstring);
             FormModified = false;
         }
-        public override void AcceptData()
+        public override AcceptDataError AcceptData()   //保存直前にデータクラスを変更する
         {
             saveDataPhoto.PhotoFolderWorking = tbxFolderPhotoWorking.Text;
             saveDataPhoto.PhotoFolder = tbxFolderPhoto.Text;
@@ -72,12 +73,28 @@ namespace STSConfigurator
             saveDataPhoto.PhotoFacialSpeed = Convert.ToInt32(tbxFSpeed.Text);
             saveDataPhoto.PhotoFacialDiaphragm = Convert.ToSingle(tbxFDiaphragm.Text);
             saveDataPhoto.PhotoFacialIso = Convert.ToInt32(tbxFIso.Text);
+
+            try
+            {
+                if (!Directory.GetDirectories(saveDataPhoto.PhotoFolderWorking).All<string>(dir => dir.Contains("OP") && dir.Contains("FP") && dir.Contains("XP")))
+                {
+                    if (!Directory.Exists(saveDataPhoto.PhotoFolderWorking + "OP")) Directory.CreateDirectory(saveDataPhoto.PhotoFolderWorking + "OP");
+                    if (!Directory.Exists(saveDataPhoto.PhotoFolderWorking + "FP")) Directory.CreateDirectory(saveDataPhoto.PhotoFolderWorking + "FP");
+                    if (!Directory.Exists(saveDataPhoto.PhotoFolderWorking + "XP")) Directory.CreateDirectory(saveDataPhoto.PhotoFolderWorking + "XP");
+                }
+            }
+            catch(DirectoryNotFoundException ex )
+            {
+                if(ex != null)
+                    MessageBox.Show("フォールダー設定を見直してください", "そのフォルダーは存在しません");
+                return new AcceptDataError(true);
+            }
+            return new AcceptDataError(false);
         }
         private void DatasChanged(object sender, EventArgs e)
         {
             IsValidated = Controls.OfType<TextBoxFWValidation>().All(tbx => tbx.isValidated);
             FormModified = Controls.OfType<TextBoxFWValidation>().Any(n => n.isModified);
-
         }
         private void preparePBX()
         {
@@ -141,6 +158,24 @@ namespace STSConfigurator
                     tbxD.Text = opFocul.ToString();
                     tbxI.Text = i.Value[0].ToString();
                 }
+            }
+        }
+        private void fbdOpen(object sender, EventArgs e)
+        {
+            fbd.SelectedPath = Environment.SpecialFolder.NetworkShortcuts.ToString();
+            DialogResult dr = fbd.ShowDialog();
+            if(dr == DialogResult.OK)
+            {
+                TextBoxFWValidation tbx = (TextBoxFWValidation)((ButtonLink)sender).ParentControl;
+                tbx.Text = fbd.SelectedPath + @"\";
+            }
+        }
+        private void tbxFolders_Validating(object sender, CancelEventArgs e)
+        {
+            if(!Directory.Exists(((TextBoxFWValidation)sender).Text))
+            {
+                DialogResult dr = MessageBox.Show("このまま登録しますか（非推奨）？", "該当するフォルダが存在しません", MessageBoxButtons.YesNo);
+                if (dr == DialogResult.No) e.Cancel = true;
             }
         }
     }

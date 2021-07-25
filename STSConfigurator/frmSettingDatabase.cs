@@ -111,10 +111,12 @@ namespace STSConfigurator
             }
             Cursor = Cursors.Default;
         }
-        public override void AcceptData()
+        public override AcceptDataError AcceptData()
         {
             ServerName = saveDataDatabase.ServerName = cbxMServer.Text;
             DatabaseName = saveDataDatabase.DatabaseName = cbxMDatabase.Text;
+
+            return new AcceptDataError(false);
         }
         private void DatasChanged(object sender, EventArgs e)
         {

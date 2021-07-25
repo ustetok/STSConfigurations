@@ -75,7 +75,7 @@ namespace STSConfigurator
             this.Controls.OfType<TextBoxFWValidation>().ToList().ForEach(tbx => tbx.Text = tbx.Originalstring);
             this.FormModified = false;
         }
-        public override void AcceptData()
+        public override AcceptDataError AcceptData()
         {
             ClinicName = classSaveDataClinic.ClinicName = tbxClinicName.Text;
             NameEnglish = classSaveDataClinic.ClinicNameEnglish = tbxClinicNameEnglish.Text;
@@ -84,6 +84,8 @@ namespace STSConfigurator
             EMail = classSaveDataClinic.ClinicEMailAddress = tbxEmail.Text;
             PostalCode = classSaveDataClinic.ClinicPostalCode = tbxPostalCode.Text;
             Address = classSaveDataClinic.ClinicAddress = tbxAddress.Text;
+
+            return new AcceptDataError(false);
         }
         private void DatasChanged(object sender, EventArgs e)
         {

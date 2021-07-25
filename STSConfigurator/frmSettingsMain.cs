@@ -166,7 +166,11 @@ namespace STSConfigurator
         }
         private void btnConfirm_Click(object sender, EventArgs e)
         {
-            formTarget.AcceptData();
+            if(formTarget.AcceptData().HasError)
+            {
+                MessageBox.Show(formTarget.Title + " に間違いがあります", "設定を見直してください");
+                return;
+            }
             formTarget.SetOrigin();
             if (formTarget.SaveModeXML)
                 formTarget.SaveToXmlFile(formTarget);

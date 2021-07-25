@@ -37,8 +37,6 @@ namespace STSConfigurator
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.tbxOSpeed = new WindowsFormControlsLibrary.TextBoxFWValidation();
@@ -54,6 +52,9 @@ namespace STSConfigurator
             this.label14 = new System.Windows.Forms.Label();
             this.tbxOIso = new WindowsFormControlsLibrary.TextBoxFWValidation();
             this.tbxFIso = new WindowsFormControlsLibrary.TextBoxFWValidation();
+            this.fbd = new System.Windows.Forms.FolderBrowserDialog();
+            this.buttonLink1 = new WindowsFormControlsLibrary.ButtonLink();
+            this.buttonLink2 = new WindowsFormControlsLibrary.ButtonLink();
             ((System.ComponentModel.ISupportInitialize)(this.pbxO)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbxF)).BeginInit();
             this.SuspendLayout();
@@ -85,6 +86,7 @@ namespace STSConfigurator
             this.tbxFolderPhotoWorking.Originalstring = null;
             this.tbxFolderPhotoWorking.Size = new System.Drawing.Size(620, 25);
             this.tbxFolderPhotoWorking.TabIndex = 0;
+            this.tbxFolderPhotoWorking.Validating += new System.ComponentModel.CancelEventHandler(this.tbxFolders_Validating);
             // 
             // label3
             // 
@@ -117,6 +119,7 @@ namespace STSConfigurator
             this.tbxFolderPhoto.Originalstring = null;
             this.tbxFolderPhoto.Size = new System.Drawing.Size(620, 25);
             this.tbxFolderPhoto.TabIndex = 1;
+            this.tbxFolderPhoto.Validating += new System.ComponentModel.CancelEventHandler(this.tbxFolders_Validating);
             // 
             // label5
             // 
@@ -147,26 +150,6 @@ namespace STSConfigurator
             this.label7.Size = new System.Drawing.Size(80, 21);
             this.label7.TabIndex = 9;
             this.label7.Text = "写真の設定";
-            // 
-            // button1
-            // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(811, 80);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(33, 25);
-            this.button1.TabIndex = 10;
-            this.button1.Text = "...";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(811, 130);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(33, 25);
-            this.button2.TabIndex = 11;
-            this.button2.Text = "...";
-            this.button2.UseVisualStyleBackColor = true;
             // 
             // label8
             // 
@@ -337,10 +320,36 @@ namespace STSConfigurator
             this.tbxFIso.Size = new System.Drawing.Size(45, 25);
             this.tbxFIso.TabIndex = 7;
             // 
+            // buttonLink1
+            // 
+            this.buttonLink1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonLink1.Location = new System.Drawing.Point(811, 80);
+            this.buttonLink1.Name = "buttonLink1";
+            this.buttonLink1.ParentControl = this.tbxFolderPhotoWorking;
+            this.buttonLink1.Size = new System.Drawing.Size(33, 26);
+            this.buttonLink1.TabIndex = 25;
+            this.buttonLink1.Text = "...";
+            this.buttonLink1.UseVisualStyleBackColor = true;
+            this.buttonLink1.Click += new System.EventHandler(this.fbdOpen);
+            // 
+            // buttonLink2
+            // 
+            this.buttonLink2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonLink2.Location = new System.Drawing.Point(811, 130);
+            this.buttonLink2.Name = "buttonLink2";
+            this.buttonLink2.ParentControl = this.tbxFolderPhoto;
+            this.buttonLink2.Size = new System.Drawing.Size(33, 25);
+            this.buttonLink2.TabIndex = 26;
+            this.buttonLink2.Text = "...";
+            this.buttonLink2.UseVisualStyleBackColor = true;
+            this.buttonLink2.Click += new System.EventHandler(this.fbdOpen);
+            // 
             // frmSettingPhoto
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 18F);
             this.ClientSize = new System.Drawing.Size(856, 509);
+            this.Controls.Add(this.buttonLink2);
+            this.Controls.Add(this.buttonLink1);
             this.Controls.Add(this.tbxFIso);
             this.Controls.Add(this.tbxOIso);
             this.Controls.Add(this.label14);
@@ -356,8 +365,6 @@ namespace STSConfigurator
             this.Controls.Add(this.tbxOSpeed);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
@@ -379,8 +386,6 @@ namespace STSConfigurator
             this.Controls.SetChildIndex(this.label5, 0);
             this.Controls.SetChildIndex(this.label6, 0);
             this.Controls.SetChildIndex(this.label7, 0);
-            this.Controls.SetChildIndex(this.button1, 0);
-            this.Controls.SetChildIndex(this.button2, 0);
             this.Controls.SetChildIndex(this.label8, 0);
             this.Controls.SetChildIndex(this.label9, 0);
             this.Controls.SetChildIndex(this.tbxOSpeed, 0);
@@ -396,6 +401,8 @@ namespace STSConfigurator
             this.Controls.SetChildIndex(this.label14, 0);
             this.Controls.SetChildIndex(this.tbxOIso, 0);
             this.Controls.SetChildIndex(this.tbxFIso, 0);
+            this.Controls.SetChildIndex(this.buttonLink1, 0);
+            this.Controls.SetChildIndex(this.buttonLink2, 0);
             ((System.ComponentModel.ISupportInitialize)(this.pbxO)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbxF)).EndInit();
             this.ResumeLayout(false);
@@ -413,8 +420,6 @@ namespace STSConfigurator
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private WindowsFormControlsLibrary.TextBoxFWValidation tbxOSpeed;
@@ -430,5 +435,8 @@ namespace STSConfigurator
         private System.Windows.Forms.Label label14;
         private WindowsFormControlsLibrary.TextBoxFWValidation tbxOIso;
         private WindowsFormControlsLibrary.TextBoxFWValidation tbxFIso;
+        private System.Windows.Forms.FolderBrowserDialog fbd;
+        private WindowsFormControlsLibrary.ButtonLink buttonLink1;
+        private WindowsFormControlsLibrary.ButtonLink buttonLink2;
     }
 }
