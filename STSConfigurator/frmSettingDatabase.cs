@@ -31,7 +31,6 @@ namespace STSConfigurator
                 return "Data Source=" + obj.ServerName + ";Initial Catalog=" + obj.DatabaseName + ";Integrated Security=SSPI";
             }
         }
-        private DataTable servers;
         
         public frmSettingDatabase()
         {
@@ -74,7 +73,7 @@ namespace STSConfigurator
         private void cbxServer_DropDown(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
-            servers = SqlDataSourceEnumerator.Instance.GetDataSources();
+            DataTable servers = SqlDataSourceEnumerator.Instance.GetDataSources();
             List<string> svrs = (from DataRow r in servers.AsEnumerable()
                                  select r.ItemArray[0].ToString() + (r.ItemArray[1].ToString() == string.Empty ? "" : @"\" + r.ItemArray[1].ToString())).ToList();
             cbxMServer.DataSource = svrs;
@@ -153,14 +152,13 @@ namespace STSConfigurator
             }
             Cursor = defaultCursor;
         }
+    }
 
-        [Serializable()]
-        public class CLSSaveDataDatabase : CLSSaveData
-        {
-            public CLSSaveDataDatabase() { }
-            public string ServerName;
-            public string DatabaseName;
-        }
-
+    [Serializable()]
+    public class CLSSaveDataDatabase : CLSSaveData
+    {
+        public string ServerName;
+        public string DatabaseName;
+        public CLSSaveDataDatabase() { }
     }
 }

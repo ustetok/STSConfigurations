@@ -37,8 +37,6 @@ namespace STSConfigurator
                 tn2.Nodes.Add(tn22);
             TreeNodeEx tn3 = new TreeNodeEx(new frmSettingBase("各デバイスごとの設定", true));
             tnRoot.Nodes.Add(tn3);
-            //TreeNodeEx tn0 = new TreeNodeEx(new frmSettingDatabase(this));
-            //tnRoot.Nodes.Add(tn0);
             //TreeNodeEx tn1 = new TreeNodeEx("共通設定");
             //tnRoot.Nodes.Add(tn1);
             //TreeNodeEx tn2 = new TreeNodeEx("個別設定");
@@ -48,11 +46,7 @@ namespace STSConfigurator
             //tnRoot.Nodes.Add(new TreeNodeEx(new frmSettingDatabase()));
             //tnRoot.Nodes.Add(tn);
 
-
-            //tnRoot.Nodes.Add(new TreeNodeEx(new SetConnectDB("データベース接続", new frmConnectDB())));
             //tnRoot.Nodes.Add(new TreeNodeEx(new SetPostalCode("郵便番号設定", new frmPostalCode())));
-            //tnRoot.Nodes.Add(new TreeNodeEx(new SetDirectries("フォルダーの設定", new frmDirectories())));
-            //tnRoot.Nodes.Add(new TreeNodeEx(new SetCamera("カメラの設定", new frmCamera())));
             //tnRoot.Nodes.Add(new TreeNodeEx(new SetPrinters("プリンターの設定", new frmPrinters())));
             //tnRoot.Nodes.Add(new TreeNodeEx(new SetOrganizerMain("OrganizerMain", new frmOrganizer())));
             //tnRoot.Nodes[4].Nodes.Add(new TreeNodeEx(new SetOrganizerTepra("テプラの設定", new frmOrganizerTepra())));

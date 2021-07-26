@@ -162,7 +162,8 @@ namespace STSConfigurator
         }
         private void fbdOpen(object sender, EventArgs e)
         {
-            fbd.SelectedPath = Environment.SpecialFolder.NetworkShortcuts.ToString();
+            string path = ((TextBoxFWValidation)((ButtonLink)sender).ParentControl).Text;
+            fbd.SelectedPath = Directory.Exists(path) ? path : Environment.SpecialFolder.NetworkShortcuts.ToString();
             DialogResult dr = fbd.ShowDialog();
             if(dr == DialogResult.OK)
             {
@@ -181,7 +182,7 @@ namespace STSConfigurator
     }
 
 
-    public class CLSSaveDataPhoto : frmSettingBase.CLSSaveData
+    public class CLSSaveDataPhoto : CLSSaveData
     {
         public string PhotoFolderWorking;
         public string PhotoFolder;

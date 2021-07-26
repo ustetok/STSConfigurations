@@ -23,14 +23,6 @@ namespace STSConfigurator
                 return LoadFromDatabase(new CLSSaveDataClinic()) as CLSSaveDataClinic;
             }
         }
-        private string ClinicName { get; set; }
-        private string NameEnglish { get; set; }
-        private string Tel { get; set; }
-        private string Fax { get; set; }
-        private string EMail { get; set; }
-        private string PostalCode { get; set; }
-        private string Address { get; set; }
-
         public frmSettingClinic()
         {
             InitializeComponent();
@@ -77,13 +69,13 @@ namespace STSConfigurator
         }
         public override AcceptDataError AcceptData()
         {
-            ClinicName = classSaveDataClinic.ClinicName = tbxClinicName.Text;
-            NameEnglish = classSaveDataClinic.ClinicNameEnglish = tbxClinicNameEnglish.Text;
-            Tel = classSaveDataClinic.ClinicTel = tbxTel.Text;
-            Fax = classSaveDataClinic.ClinicFax = tbxFax.Text;
-            EMail = classSaveDataClinic.ClinicEMailAddress = tbxEmail.Text;
-            PostalCode = classSaveDataClinic.ClinicPostalCode = tbxPostalCode.Text;
-            Address = classSaveDataClinic.ClinicAddress = tbxAddress.Text;
+            classSaveDataClinic.ClinicName = tbxClinicName.Text;
+            classSaveDataClinic.ClinicNameEnglish = tbxClinicNameEnglish.Text;
+            classSaveDataClinic.ClinicTel = tbxTel.Text;
+            classSaveDataClinic.ClinicFax = tbxFax.Text;
+            classSaveDataClinic.ClinicEMailAddress = tbxEmail.Text;
+            classSaveDataClinic.ClinicPostalCode = tbxPostalCode.Text;
+            classSaveDataClinic.ClinicAddress = tbxAddress.Text;
 
             return new AcceptDataError(false);
         }
@@ -95,8 +87,7 @@ namespace STSConfigurator
     }
 
 
-    [Serializable()]
-    public class CLSSaveDataClinic : frmSettingBase.CLSSaveData
+    public class CLSSaveDataClinic : CLSSaveData
     {
         public string ClinicName;
         public string ClinicNameEnglish;

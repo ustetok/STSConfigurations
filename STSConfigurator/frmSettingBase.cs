@@ -39,12 +39,12 @@ namespace STSConfigurator
             set { lblTitle.Text = value; }
         }
 
-        public frmSettingBase() 
+        public frmSettingBase()
         {
             InitializeComponent();
             TopLevel = false;
         }
-        public frmSettingBase(string formTitle, bool isHeader):this()
+        public frmSettingBase(string formTitle, bool isHeader) : this()
         {
             Title = formTitle;
             HeadingForm = isHeader;
@@ -53,8 +53,6 @@ namespace STSConfigurator
         {
             ownerForm = frm;
         }
-        public virtual void SetOrigin() { }
-        public virtual void ResumeToOrigin() { }
         #region static method
         public static bool ExsistFile(string title)
         {
@@ -91,36 +89,41 @@ namespace STSConfigurator
                 var cmd = conn.CreateCommand();
                 if (type == typeof(CLSSaveDataClinic)) cmd.CommandText = "SELECT * FROM T_Configuration";
                 else cmd.CommandText = "SELECT * FROM T_ConfigurationPhoto";
-                    try
+                try
+                {
+                    conn.Open();
+                    using (var sdr = cmd.ExecuteReader())
                     {
-                        conn.Open();
-                        using (var sdr = cmd.ExecuteReader())
+                        if (sdr.HasRows)    //一回だけ読む（複数登録を認めていない）
                         {
-                            if (sdr.HasRows)    //一回だけ読む（複数登録を認めていない）
-                            {
-                                sdr.Read();
+                            sdr.Read();
 
-                                for (int i = 0; i < fieldInfo.Length; i++)
-                                {
-                                    fieldInfo[i].SetValue(csd, sdr[fieldInfo[i].Name]);
-                                }
+                            for (int i = 0; i < fieldInfo.Length; i++)
+                            {
+                                fieldInfo[i].SetValue(csd, sdr[fieldInfo[i].Name]);
                             }
                         }
-                        return csd;
                     }
-                    catch (Exception error)
-                    {
-                        MessageBox.Show(error.ToString(), "データベースが開けません");
-                        throw;
-                    }
-                    finally
-                    {
-                        Cursor.Current = c;
-                    }
+                    return csd;
+                }
+                catch (Exception error)
+                {
+                    MessageBox.Show(error.ToString(), "データベースが開けません");
+                    throw;
+                }
+                finally
+                {
+                    Cursor.Current = c;
+                }
             }
         }
         #endregion
-        public virtual void SaveToDatabase(CLSSaveData csd)
+
+        #region public method
+        public virtual void SetOrigin() { }
+        public virtual void ResumeToOrigin() { }
+        public virtual AcceptDataError AcceptData() { return null; }
+        public void SaveToDatabase(CLSSaveData csd)
         {
             bool isNew;
             string tableName = "";
@@ -188,11 +191,9 @@ namespace STSConfigurator
                 }
             }
         }
-
-        
         public void SaveToXmlFile(frmSettingBase frmsettingbase)
         {
-            frmSettingBase.CLSSaveData csd = frmsettingbase.ClassSaveData;
+            CLSSaveData csd = frmsettingbase.ClassSaveData;
             var xmlserializer = new XmlSerializer(csd.GetType());
             using (TextWriter tw = new StreamWriter(frmSettingBase.GetFilename(frmsettingbase.Title)))
             {
@@ -208,14 +209,15 @@ namespace STSConfigurator
                 }
             }
         }
-        
-        public virtual AcceptDataError AcceptData() { return null; }
-        [Serializable()]
-        public class CLSSaveData
-        {
-            public CLSSaveData() { }
-        }
+        #endregion
     }
+
+    [Serializable()]
+    public class CLSSaveData
+    {
+        public CLSSaveData() { }
+    }
+
     public class AcceptDataError
     {
         public bool HasError { get; set; }
